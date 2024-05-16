@@ -62,7 +62,8 @@ public class OraclePlanNode extends AbstractExecutionPlanNode implements DBCPlan
                             "merge",
                             "group",
                             "materialize",
-                            "function"));
+                            "function",
+                            "table access"));
 
     private final OracleDataSource dataSource;
     private String statementId;
@@ -135,6 +136,12 @@ public class OraclePlanNode extends AbstractExecutionPlanNode implements DBCPlan
 
                 case "foregin":
                     return DBCPlanNodeKind.TABLE_SCAN;
+
+                case "table access":
+                    if (options.toLowerCase().equals("full")) {
+                        return DBCPlanNodeKind.TABLE_SCAN;
+                    }
+                    return DBCPlanNodeKind.NOT_FULL_TABLE_SCAN;
 
                 case "aggregate":
                     return DBCPlanNodeKind.AGGREGATE;

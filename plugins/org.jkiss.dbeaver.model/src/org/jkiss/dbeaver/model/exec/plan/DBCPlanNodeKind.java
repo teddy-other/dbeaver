@@ -28,6 +28,7 @@ public enum DBCPlanNodeKind {
     DEFAULT("Node", null),
     SELECT("Select", null),
     TABLE_SCAN("Table scan", RelationalObjectType.TYPE_TABLE),
+    NOT_FULL_TABLE_SCAN("Not Full Table scan", RelationalObjectType.TYPE_TABLE),
     INDEX_SCAN("Index scan", RelationalObjectType.TYPE_INDEX),
     JOIN("Join", null),
     HASH("Hash", null),
