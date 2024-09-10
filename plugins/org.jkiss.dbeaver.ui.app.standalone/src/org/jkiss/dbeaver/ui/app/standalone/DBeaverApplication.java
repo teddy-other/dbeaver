@@ -46,10 +46,10 @@ import org.jkiss.dbeaver.model.DBConstants;
 import org.jkiss.dbeaver.model.app.DBPApplicationController;
 import org.jkiss.dbeaver.model.app.DBPApplicationDesktop;
 import org.jkiss.dbeaver.model.app.DBPPlatform;
+import org.jkiss.dbeaver.model.impl.app.BaseWorkspaceImpl;
 import org.jkiss.dbeaver.model.preferences.DBPPreferenceStore;
+import org.jkiss.dbeaver.model.rcp.DesktopApplicationImpl;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
-import org.jkiss.dbeaver.registry.BaseWorkspaceImpl;
-import org.jkiss.dbeaver.registry.DesktopApplicationImpl;
 import org.jkiss.dbeaver.registry.SWTBrowserRegistry;
 import org.jkiss.dbeaver.registry.timezone.TimezoneRegistry;
 import org.jkiss.dbeaver.registry.updater.VersionDescriptor;
@@ -251,8 +251,9 @@ public class DBeaverApplication extends DesktopApplicationImpl implements DBPApp
         // Write version info
         writeWorkspaceInfo();
 
-        // Update splash. Do it AFTER platform startup because platform may initiate some splash shell interactions
-        if (!RuntimeUtils.isMacOsSomona()) {
+        // https://github.com/eclipse-platform/eclipse.platform.swt/issues/772
+        if (!RuntimeUtils.isMacOS() || !RuntimeUtils.isOSVersionAtLeast(14, 0, 0)) {
+            // Update splash. Do it AFTER platform startup because platform may initiate some splash shell interactions
             updateSplashHandler();
         }
 
