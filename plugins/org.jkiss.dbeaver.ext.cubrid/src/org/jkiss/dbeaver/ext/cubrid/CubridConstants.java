@@ -32,4 +32,6 @@ public class CubridConstants
     public static final String DEFAULT_HOST = "localhost";
     public static final String DEFAULT_PORT = "30000";
     public static final String AUTO_INCREMENT = "auto_increment";
+    public static final String PREF_DBMS_OUTPUT = "cubrid.dbms.output";
+    public static final String PREF_DBMS_OUTPUT_BUFFER_SIZE = "cubrid.dbms.output.buffer.size";
 }

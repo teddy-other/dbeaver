@@ -23,4 +23,23 @@
     <extension point="org.jkiss.dbeaver.objectManager">
         <manager class="org.jkiss.dbeaver.ext.cubrid.ui.config.CubridUserManager" objectType="org.jkiss.dbeaver.ext.cubrid.model.CubridPrivilage"/>
     </extension>
+
+    <extension point="org.eclipse.ui.preferencePages">
+        <page category="org.jkiss.dbeaver.preferences.drivers" id="org.jkiss.dbeaver.preferences.cubrid.general" 
+        class="org.jkiss.dbeaver.ext.cubrid.ui.views.PrefPageCubrid" name="CUBRID">
+            <keywordReference id="org.jkiss.dbeaver.core.keyword.dbeaver"/>
+        </page>
+    </extension>
+
+    <extension point="org.eclipse.ui.propertyPages">
+        <page id="org.jkiss.dbeaver.preferences.cubrid.main" class="org.jkiss.dbeaver.ext.cubrid.ui.views.PrefPageCubrid" 
+        name="%page.org.jkiss.dbeaver.preferences.cubrid.main.name">
+            <enabledWhen>
+                <adapt type="org.jkiss.dbeaver.model.DBPDataSourceContainer">
+                    <test property="org.jkiss.dbeaver.core.datasourceContainer.driverId" value="cubrid_jdbc"/>
+                </adapt>
+            </enabledWhen>
+        </page>
+    </extension>
+
 </plugin>
