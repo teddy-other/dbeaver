@@ -235,6 +235,7 @@ public class CubridDataSource extends GenericDataSource
         serverCache.clearCache();
         privilageCache.clearCache();
         return this;
+    }
 
     @Override
     protected void initializeContextState(
