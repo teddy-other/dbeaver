@@ -29,5 +29,9 @@ public class CubridConstants
     public static final String NAME = "name";
     public static final String COMMENT = "comment";
     public static final String DBA = "dba";
+    
     public static final String AUTO_INCREMENT = "auto_increment";
+    
+    public static final String PREF_DBMS_OUTPUT = "cubrid.dbms.output";
+    public static final String PREF_DBMS_OUTPUT_BUFFER_SIZE = "cubrid.dbms.output.buffer.size";
 }

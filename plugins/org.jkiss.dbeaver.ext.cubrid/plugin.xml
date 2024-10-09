@@ -195,6 +195,7 @@
                     <file type="jar" path="drivers/cubrid" bundle="drivers.cubrid"/>
                     <replace provider="generic" driver="cubrid_jdbc"/>
                     <parameter name="ping-sql" value="SELECT 1"/>
+                    <parameter name="stored-unquoted-case" value="UPPER"/>
                     <property name="altHosts" value=""/>
                     <property name="rcTime" value="600"/>
                     <property name="loadBalance" value="false"/>
@@ -213,6 +214,7 @@
                     <property name="preparedStmtCacheSize" value="25"/>
                     <property name="preparedStmtCacheSqlLimit" value="256"/>
                     <property name="hold_cursor" value="true"/>
+                    <property name="@dbeaver-default-resultset.maxrows.sql" value="true"/>
                 </driver>
              </drivers>
         </datasource>
@@ -225,4 +227,9 @@
         <manager class="org.jkiss.dbeaver.ext.cubrid.edit.CubridSequenceManager" objectType="org.jkiss.dbeaver.ext.cubrid.model.CubridSequence"/>
         <manager class="org.jkiss.dbeaver.ext.cubrid.edit.CubridViewManager" objectType="org.jkiss.dbeaver.ext.cubrid.model.CubridView"/>
     </extension>
+    
+   	<extension point="org.eclipse.core.runtime.preferences">
+        <initializer class="org.jkiss.dbeaver.ext.cubrid.internal.CubridPreferencesInitializer"/>
+    </extension>
+  
 </plugin>

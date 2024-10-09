@@ -19,6 +19,7 @@ package org.jkiss.dbeaver.ext.cubrid.model;
 import org.jkiss.code.NotNull;
 import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.DBException;
+import org.jkiss.dbeaver.ext.cubrid.CubridConstants;
 import org.jkiss.dbeaver.ext.cubrid.model.meta.CubridMetaModel;
 import org.jkiss.dbeaver.ext.generic.model.GenericDataSource;
 import org.jkiss.dbeaver.ext.generic.model.GenericSchema;
@@ -26,16 +27,27 @@ import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 import org.jkiss.dbeaver.model.DBPDataSourceContainer;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.dpi.DPIContainer;
+import org.jkiss.dbeaver.model.exec.DBCException;
+import org.jkiss.dbeaver.model.exec.DBCExecutionContext;
+import org.jkiss.dbeaver.model.exec.DBCExecutionPurpose;
+import org.jkiss.dbeaver.model.exec.DBCExecutionResult;
+import org.jkiss.dbeaver.model.exec.DBCStatement;
+import org.jkiss.dbeaver.model.exec.jdbc.JDBCDatabaseMetaData;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCPreparedStatement;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCStatement;
+import org.jkiss.dbeaver.model.exec.output.DBCOutputWriter;
+import org.jkiss.dbeaver.model.exec.output.DBCServerOutputReader;
 import org.jkiss.dbeaver.model.impl.jdbc.cache.JDBCObjectCache;
+import org.jkiss.dbeaver.model.impl.jdbc.JDBCExecutionContext;
 import org.jkiss.dbeaver.model.impl.jdbc.JDBCUtils;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 import org.jkiss.dbeaver.model.struct.DBSDataType;
 import org.jkiss.dbeaver.model.struct.DBSObject;
 
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,9 +60,11 @@ public class CubridDataSource extends GenericDataSource
 {
     private final CubridMetaModel metaModel;
     private boolean supportMultiSchema;
+    private boolean supportDBMSOutput = false;
     private final CubridServerCache serverCache;
     private ArrayList<CubridCharset> charsets;
     private Map<String, CubridCollation> collations;
+    private CubridOutputReader outputReader = null;
 
     public CubridDataSource(
             @NotNull DBRProgressMonitor monitor,
@@ -207,6 +221,21 @@ public class CubridDataSource extends GenericDataSource
         return this;
     }
 
+    @Override
+    protected void initializeContextState(
+            DBRProgressMonitor monitor, JDBCExecutionContext context, JDBCExecutionContext initFrom)
+            throws DBException {
+        super.initializeContextState(monitor, context, initFrom);
+
+        if (outputReader == null && checkSupportDBMSOutput(monitor, context)) {
+            outputReader = new CubridOutputReader();
+        }
+
+        if (outputReader != null) {
+            outputReader.enableDBMSOutput(monitor, context);
+        }
+    }
+
     public boolean getSupportMultiSchema() {
         return this.supportMultiSchema;
     }
@@ -242,5 +271,115 @@ public class CubridDataSource extends GenericDataSource
     @Override
     public boolean splitProceduresAndFunctions() {
         return true;
+    }
+
+    @Override
+    public <T> T getAdapter(Class<T> adapter) {
+        if (adapter == DBCServerOutputReader.class) {
+            return adapter.cast(outputReader);
+        }
+        return super.getAdapter(adapter);
+    }
+
+    public boolean isSupportDBMSOutput() {
+        return supportDBMSOutput;
+    }
+    
+    private boolean checkSupportDBMSOutput(
+            @NotNull DBRProgressMonitor monitor, @NotNull DBCExecutionContext context)
+            throws DBException {
+
+        try (JDBCSession session =
+                (JDBCSession)
+                        context.openSession(
+                                monitor, DBCExecutionPurpose.UTIL, "Read Database Version")) {
+            JDBCDatabaseMetaData metaData;
+            metaData = session.getMetaData();
+            readDatabaseServerVersion(metaData);
+        } catch (SQLException e) {
+            throw new DBException("Check Support DBMSOutput failed", e);
+        }
+
+        supportDBMSOutput = isServerVersionAtLeast(11, 4); 
+        
+        return supportDBMSOutput;
+    }
+    
+    private class CubridOutputReader implements DBCServerOutputReader {
+        @Override
+        public boolean isServerOutputEnabled() {
+            return getContainer().getPreferenceStore().getBoolean(CubridConstants.PREF_DBMS_OUTPUT);
+        }
+
+        @Override
+        public boolean isAsyncOutputReadSupported() {
+            return false;
+        }
+
+        public void enableDBMSOutput(DBRProgressMonitor monitor, DBCExecutionContext context)
+                throws DBCException {
+            if (!isServerOutputEnabled()) {
+                return;
+            }
+
+            int bufferSize =
+                    getContainer()
+                            .getPreferenceStore()
+                            .getInt(CubridConstants.PREF_DBMS_OUTPUT_BUFFER_SIZE);
+            System.out.println("enableDBMSOutput bufferSize : " + bufferSize);
+            ResultSet rs = null;
+            try (JDBCSession session =
+                    (JDBCSession)
+                            context.openSession(
+                                    monitor, DBCExecutionPurpose.UTIL, "Enable DBMS output")) {
+                CallableStatement cstmt = session.getOriginal().prepareCall("CALL ENABLE(?)");
+                cstmt.setInt(1, bufferSize);
+                cstmt.execute();
+            } catch (SQLException e) {
+                throw new DBCException(e, context);
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                } catch (SQLException e) {
+                    throw new DBCException(e, context);
+                }
+            }
+        }
+
+        @Override
+        public void readServerOutput(
+                @NotNull DBRProgressMonitor monitor,
+                @NotNull DBCExecutionContext context,
+                @Nullable DBCExecutionResult executionResult,
+                @Nullable DBCStatement statement,
+                @NotNull DBCOutputWriter output)
+                throws DBCException {
+            try (JDBCSession session =
+                    (JDBCSession)
+                            context.openSession(
+                                    monitor, DBCExecutionPurpose.UTIL, "Read DBMS output")) {
+                try (CallableStatement cstmt =
+                        session.getOriginal().prepareCall("CALL GET_LINE(?,?)")) {
+                    cstmt.registerOutParameter(1, java.sql.Types.VARCHAR);
+                    cstmt.registerOutParameter(2, java.sql.Types.INTEGER);
+
+                    String line;
+                    int status = 0;
+                    while (status == 0) {
+                        cstmt.execute();
+                        status = cstmt.getInt(2);
+                        if (status == 0) {
+                            line = cstmt.getString(1);
+                            output.println(null, line);
+                        }
+                    }
+
+                } catch (SQLException e) {
+                    throw new DBCException(e, context);
+                }
+            }
+        }
     }
 }
