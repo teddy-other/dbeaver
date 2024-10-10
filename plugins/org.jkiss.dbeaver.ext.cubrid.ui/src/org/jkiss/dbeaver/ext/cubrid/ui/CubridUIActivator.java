@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jkiss.dbeaver.ext.cubrid.ui.internal;
+package org.jkiss.dbeaver.ext.cubrid.ui;
 
 import org.eclipse.core.runtime.Plugin;
 import org.jkiss.dbeaver.Log;
@@ -25,19 +25,19 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class CubridActivator extends Plugin {
-	private static final Log log = Log.getLog(CubridActivator.class);
+public class CubridUIActivator extends Plugin {
+	private static final Log log = Log.getLog(CubridUIActivator.class);
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.jkiss.dbeaver.ext.cubrid";
+    public static final String PLUGIN_ID = "org.jkiss.dbeaver.ext.cubrid.ui";
 
     // The shared instance
-    private static CubridActivator plugin;
+    private static CubridUIActivator plugin;
     private BundlePreferenceStore preferenceStore;
 
     /**
      * The constructor
      */
-    public CubridActivator() {
+    public CubridUIActivator() {
     }
 
     /*
@@ -65,7 +65,7 @@ public class CubridActivator extends Plugin {
      *
      * @return the shared instance
      */
-    public static CubridActivator getDefault() {
+    public static CubridUIActivator getDefault() {
         return plugin;
     }
 
