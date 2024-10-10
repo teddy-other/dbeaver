@@ -14,9 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jkiss.dbeaver.ext.cubrid.internal;
+package org.jkiss.dbeaver.ext.cubrid.ui.internal;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
+import org.jkiss.dbeaver.Log;
 import org.jkiss.dbeaver.ext.cubrid.CubridConstants;
 import org.jkiss.dbeaver.model.preferences.DBPPreferenceStore;
 import org.jkiss.dbeaver.runtime.DBWorkbench;
@@ -24,11 +25,14 @@ import org.jkiss.dbeaver.utils.PrefUtils;
 
 public class CubridPreferencesInitializer extends AbstractPreferenceInitializer {
 
+	private static final Log log = Log.getLog(CubridPreferencesInitializer.class);
+	
     public CubridPreferencesInitializer() {
     }
 
     @Override
     public void initializeDefaultPreferences() {
+    	log.info("initializeDefaultPreferences");
         DBPPreferenceStore store = DBWorkbench.getPlatform().getPreferenceStore();
 
         PrefUtils.setDefaultPreferenceValue(store, CubridConstants.PREF_DBMS_OUTPUT, true);

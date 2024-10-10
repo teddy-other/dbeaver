@@ -24,6 +24,10 @@
         <manager class="org.jkiss.dbeaver.ext.cubrid.ui.config.CubridUserManager" objectType="org.jkiss.dbeaver.ext.cubrid.model.CubridPrivilage"/>
     </extension>
 
+    <extension point="org.eclipse.core.runtime.preferences">
+        <initializer class="org.jkiss.dbeaver.ext.cubrid.ui.CubridPreferencesInitializer"/>
+    </extension>
+
     <extension point="org.eclipse.ui.preferencePages">
         <page category="org.jkiss.dbeaver.preferences.drivers" id="org.jkiss.dbeaver.preferences.cubrid.general" 
         class="org.jkiss.dbeaver.ext.cubrid.ui.views.PrefPageCubrid" name="CUBRID">
