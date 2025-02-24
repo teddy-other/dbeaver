@@ -47,7 +47,6 @@ import org.jkiss.dbeaver.model.struct.DBSDataType;
 import org.jkiss.dbeaver.model.struct.DBSObject;
 
 import java.sql.CallableStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -60,7 +59,7 @@ public class CubridDataSource extends GenericDataSource
 {
     private final CubridMetaModel metaModel;
     private boolean supportMultiSchema;
-    private boolean supportDBMSOutput = false;
+    private boolean supportDBMSOutputPLCSQL = false;
     private final CubridPrivilageCache privilageCache;
     private final CubridServerCache serverCache;
     private ArrayList<CubridCharset> charsets;
@@ -259,7 +258,7 @@ public class CubridDataSource extends GenericDataSource
     public void setSupportMultiSchema(@NotNull boolean supportMultiSchema) {
         this.supportMultiSchema = supportMultiSchema;
     }
-
+    
     public class CubridServerCache extends JDBCObjectCache<CubridDataSource, CubridServer> {
         @NotNull
         @Override
@@ -321,8 +320,14 @@ public class CubridDataSource extends GenericDataSource
         return super.getAdapter(adapter);
     }
 
-    public boolean isSupportDBMSOutput() {
-        return supportDBMSOutput;
+    public boolean isSupportEnableDBMS() {
+    	boolean ret = getContainer().getPreferenceStore().getBoolean(CubridConstants.PREF_DBMS_OUTPUT);
+    	System.out.println("isSupportEnableDBMS : " + ret);
+        return ret;
+    }
+    
+    public boolean isSupportDBMSOutputPLCSQL() {
+        return supportDBMSOutputPLCSQL;
     }
     
     private boolean checkSupportDBMSOutput(
@@ -339,10 +344,10 @@ public class CubridDataSource extends GenericDataSource
         } catch (SQLException e) {
             throw new DBException("Check Support DBMSOutput failed", e);
         }
-
-        supportDBMSOutput = isServerVersionAtLeast(11, 4); 
         
-        return supportDBMSOutput;
+        supportDBMSOutputPLCSQL = isServerVersionAtLeast(11, 4); 
+        
+        return supportDBMSOutputPLCSQL;
     }
     
     private class CubridOutputReader implements DBCServerOutputReader {
@@ -367,24 +372,15 @@ public class CubridDataSource extends GenericDataSource
                             .getPreferenceStore()
                             .getInt(CubridConstants.PREF_DBMS_OUTPUT_BUFFER_SIZE);
 
-            ResultSet rs = null;
             try (JDBCSession session =
                     (JDBCSession)
                             context.openSession(
                                     monitor, DBCExecutionPurpose.UTIL, "Enable DBMS output")) {
-                CallableStatement cstmt = session.getOriginal().prepareCall("CALL ENABLE(?)");
+                CallableStatement cstmt = session.getOriginal().prepareCall("CALL dbms_output.enable(?)");
                 cstmt.setInt(1, bufferSize);
                 cstmt.execute();
             } catch (SQLException e) {
                 throw new DBCException(e, context);
-            } finally {
-                try {
-                    if (rs != null) {
-                        rs.close();
-                    }
-                } catch (SQLException e) {
-                    throw new DBCException(e, context);
-                }
             }
         }
 
@@ -401,7 +397,7 @@ public class CubridDataSource extends GenericDataSource
                             context.openSession(
                                     monitor, DBCExecutionPurpose.UTIL, "Read DBMS output")) {
                 try (CallableStatement cstmt =
-                        session.getOriginal().prepareCall("CALL GET_LINE(?,?)")) {
+                        session.getOriginal().prepareCall("CALL dbms_output.get_line(?,?)")) {
                     cstmt.registerOutParameter(1, java.sql.Types.VARCHAR);
                     cstmt.registerOutParameter(2, java.sql.Types.INTEGER);
 

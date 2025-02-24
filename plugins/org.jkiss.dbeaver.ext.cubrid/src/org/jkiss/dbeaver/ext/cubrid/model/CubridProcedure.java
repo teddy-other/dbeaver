@@ -52,10 +52,12 @@ public class CubridProcedure extends GenericProcedure implements DBSObjectWithSc
             @NotNull String procedureName,
             @Nullable String description,
             @NotNull DBSProcedureType procedureType,
+            @NotNull String source,
             @NotNull String returnType) {
-        super(container, procedureName, description, procedureType, null, true);
+        super(container, procedureName, description, procedureType, source, true);
         this.procedureType = procedureType;
         this.returnType = returnType;
+        this.source = source;
     }
 
     public CubridProcedure(@NotNull GenericStructContainer container, DBSProcedureType procedureType) {
@@ -182,7 +184,7 @@ public class CubridProcedure extends GenericProcedure implements DBSObjectWithSc
                         String dataType = JDBCUtils.safeGetString(dbResult, "data_type");
                         String mode = JDBCUtils.safeGetString(dbResult, "mode");
                         String comment = JDBCUtils.safeGetString(dbResult, CubridConstants.COMMENT);
-                        addColumn(new CubridProcedureParameter(this, getName(), argName, dataType, mode, comment));
+                        addColumn(new CubridProcedureParameter(this, argName, dataType, mode, comment));
                     }
                 }
             }

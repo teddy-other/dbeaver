@@ -97,7 +97,7 @@ public class CubridSQLDialect extends GenericSQLDialect
         }
         return false;
     }
-
+    
     @NotNull
     @Override
     public int getSchemaUsage() {
