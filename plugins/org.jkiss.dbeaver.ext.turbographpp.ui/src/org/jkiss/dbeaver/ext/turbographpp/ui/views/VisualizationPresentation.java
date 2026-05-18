@@ -69,6 +69,13 @@ import org.jkiss.dbeaver.ui.DBeaverIcons;
 import org.jkiss.dbeaver.ui.UIStyles;
 import org.jkiss.dbeaver.ui.UIUtils;
 import org.jkiss.dbeaver.ui.controls.resultset.AbstractPresentation;
+import org.jkiss.dbeaver.ui.controls.resultset.IResultSetController;
+import org.jkiss.dbeaver.ui.controls.resultset.IResultSetSelection;
+import org.jkiss.dbeaver.ui.controls.resultset.ResultSetCopySettings;
+import org.jkiss.dbeaver.ui.controls.resultset.ResultSetModel;
+import org.jkiss.dbeaver.ui.controls.resultset.ResultSetPreferences;
+import org.jkiss.dbeaver.ui.controls.resultset.ResultSetRow;
+import org.jkiss.dbeaver.ui.controls.resultset.ResultSetThemeSettings;
 import org.jkiss.dbeaver.ui.dialogs.BaseDialog;
 import org.jkiss.dbeaver.ui.editors.TextEditorUtils;
 import org.jkiss.utils.CommonUtils;
@@ -211,7 +218,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
     @Override
     protected void applyThemeSettings(ITheme currentTheme) {
-        Font rsFont = currentTheme.getFontRegistry().get(ThemeConstants.FONT_SQL_RESULT_SET);
+        Font rsFont = ResultSetThemeSettings.instance.resultSetFont;
         if (rsFont != null) {
             int fontHeight = rsFont.getFontData()[0].getHeight();
             Font font = UIUtils.getMonospaceFont();
@@ -1122,4 +1129,5 @@ public class VisualizationPresentation extends AbstractPresentation implements I
             return super.close();
         }
     }
+
 }

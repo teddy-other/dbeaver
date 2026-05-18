@@ -49,7 +49,7 @@
                 supportsRecordMode="false"
                 supportsMiniMap="true"
                 order="50">
-            <objectType name="org.jkiss.dbeaver.model.exec.DBCResultSet" if="context.supportsGraphVisualize()"/>
+            <objectType name="org.jkiss.dbeaver.model.exec.DBCResultSet" if="object.session.dataSource.container.driver.id == 'vit_neo4j_jdbc' || object.session.dataSource.container.driver.id == 'vit_turbograph_jdbc' || object.session.dataSource.container.driver.id == 'coradb_jdbc'"/>
         </presentation>
    </extension>
    

@@ -19,7 +19,7 @@ package org.jkiss.dbeaver.ext.turbographpp.edit;
 import org.jkiss.dbeaver.ext.generic.edit.GenericViewManager;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 
-public class TurboGraphPPViewManager extends GenericViewManager 
+public class TurboGraphPPEdgeManager extends GenericViewManager 
 {
 
     @Override

@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jkiss.code.NotNull;
-import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.Log;
 import org.jkiss.dbeaver.ext.generic.model.GenericStructContainer;
@@ -34,7 +32,6 @@ import org.jkiss.dbeaver.model.DBPEvaluationContext;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.data.DBDDataFilter;
 import org.jkiss.dbeaver.model.data.DBDDataReceiver;
-import org.jkiss.dbeaver.model.exec.DBCException;
 import org.jkiss.dbeaver.model.exec.DBCExecutionSource;
 import org.jkiss.dbeaver.model.exec.DBCResultSet;
 import org.jkiss.dbeaver.model.exec.DBCSession;
@@ -51,12 +48,12 @@ import org.jkiss.dbeaver.model.messages.ModelMessages;
 import org.jkiss.dbeaver.model.meta.Property;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 
-public class TurboGraphPPTable extends GenericTable {
+public class TurboGraphPPVertex extends GenericTable {
 
-    private static final Log log = Log.getLog(TurboGraphPPTable.class);
-    List<TurboGraphPPTableColumn> properties = null;
+    private static final Log log = Log.getLog(TurboGraphPPVertex.class);
+    List<TurboGraphPPVertexColumn> properties = null;
     
-    public TurboGraphPPTable(
+    public TurboGraphPPVertex(
             GenericStructContainer container,
             String tableName,
             String tableType,
@@ -65,7 +62,7 @@ public class TurboGraphPPTable extends GenericTable {
     }
     
     @Override
-    public List<TurboGraphPPTableColumn> getAttributes(DBRProgressMonitor monitor)
+    public List<TurboGraphPPVertexColumn> getAttributes(DBRProgressMonitor monitor)
             throws DBException {
         if (!((TurboGraphPPDataSource)this.getDataSource()).isTurboGraph()) {
             if (properties != null) {
@@ -73,7 +70,7 @@ public class TurboGraphPPTable extends GenericTable {
             }
             return this.getProperties(monitor);
         }
-        return (List<TurboGraphPPTableColumn>) super.getAttributes(monitor);
+        return (List<TurboGraphPPVertexColumn>) super.getAttributes(monitor);
     }
     
     @Override
@@ -177,7 +174,7 @@ public class TurboGraphPPTable extends GenericTable {
         return false;
     }
     
-    private List<TurboGraphPPTableColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
+    private List<TurboGraphPPVertexColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
         if (this.properties != null) {
             return this.properties;
         }

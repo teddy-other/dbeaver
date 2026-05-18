@@ -37,11 +37,11 @@ import org.jkiss.dbeaver.model.meta.Property;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 import org.jkiss.dbeaver.model.struct.DBSObject;
 
-public class Neo4jEdge extends TurboGraphPPView {
+public class Neo4jEdge extends TurboGraphPPEdge {
 
     private final TurboGraphPPDataSource dataSource;
     private String edgeType;
-    private List<TurboGraphPPTableColumn> properties;
+    private List<TurboGraphPPVertexColumn> properties;
     
     public Neo4jEdge(GenericStructContainer container, String tableName, String tableType, JDBCResultSet dbResult) {
 		super(container, tableName, tableType, dbResult);
@@ -103,7 +103,7 @@ public class Neo4jEdge extends TurboGraphPPView {
 
     @Nullable
     @Override
-    public List<TurboGraphPPTableColumn> getAttributes(@NotNull DBRProgressMonitor monitor)
+    public List<TurboGraphPPVertexColumn> getAttributes(@NotNull DBRProgressMonitor monitor)
             throws DBException {
         return getProperties(monitor);
     }
@@ -123,7 +123,7 @@ public class Neo4jEdge extends TurboGraphPPView {
         return null;
     }
 
-    private List<TurboGraphPPTableColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
+    private List<TurboGraphPPVertexColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
         if (this.properties != null) {
             return this.properties;
         }

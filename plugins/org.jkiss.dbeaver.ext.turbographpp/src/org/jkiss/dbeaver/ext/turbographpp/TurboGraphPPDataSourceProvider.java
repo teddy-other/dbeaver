@@ -23,7 +23,6 @@ import org.jkiss.dbeaver.ext.generic.GenericDataSourceProvider;
 import org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPDataSource;
 import org.jkiss.dbeaver.ext.turbographpp.model.TurboPPSQLDialect;
 import org.jkiss.dbeaver.ext.turbographpp.model.meta.TurboGraphPPMetaModel;
-import org.jkiss.dbeaver.model.DBPDataSource;
 import org.jkiss.dbeaver.model.DBPDataSourceContainer;
 import org.jkiss.dbeaver.model.connection.DBPConnectionConfiguration;
 import org.jkiss.dbeaver.model.connection.DBPDriver;
@@ -33,7 +32,7 @@ import org.jkiss.dbeaver.model.preferences.DBPPropertyDescriptor;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 import org.jkiss.utils.CommonUtils;
 
-public class TurboGraphPPDataSourceProvider extends GenericDataSourceProvider {
+public class TurboGraphPPDataSourceProvider extends GenericDataSourceProvider<TurboGraphPPDataSource> {
 
 	public TurboGraphPPDataSourceProvider() {
         super(TurboGraphPPDataSource.class);
@@ -42,7 +41,6 @@ public class TurboGraphPPDataSourceProvider extends GenericDataSourceProvider {
     @NotNull
     @Override
     public TurboGraphPPDataSource openDataSource(DBRProgressMonitor monitor, DBPDataSourceContainer container) throws DBException {
-    	// TODO Auto-generated method stub
     	return new TurboGraphPPDataSource(monitor, container, new TurboGraphPPMetaModel(), new TurboPPSQLDialect());
     }
 

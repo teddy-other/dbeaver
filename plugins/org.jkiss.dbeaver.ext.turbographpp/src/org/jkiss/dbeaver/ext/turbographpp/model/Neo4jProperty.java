@@ -23,7 +23,7 @@ import org.jkiss.dbeaver.ext.generic.model.GenericTable;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 import org.jkiss.dbeaver.model.meta.Property;
 
-public class Neo4jProperty extends TurboGraphPPTableColumn {
+public class Neo4jProperty extends TurboGraphPPVertexColumn {
 
     String edgesPropery;
     

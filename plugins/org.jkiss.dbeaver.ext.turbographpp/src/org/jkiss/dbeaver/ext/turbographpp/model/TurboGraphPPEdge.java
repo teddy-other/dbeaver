@@ -33,9 +33,9 @@ import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
 import org.jkiss.dbeaver.model.meta.Property;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 
-public class TurboGraphPPView extends GenericView {
+public class TurboGraphPPEdge extends GenericView {
 
-    public TurboGraphPPView(
+    public TurboGraphPPEdge(
     		GenericStructContainer container,
             String tableName,
             String tableType,
@@ -56,9 +56,9 @@ public class TurboGraphPPView extends GenericView {
 //    
 //    
 //    @Override
-//    public List<? extends TurboGraphPPTableColumn> getAttributes(DBRProgressMonitor monitor)
+//    public List<? extends TurboGraphPPVertexColumn> getAttributes(DBRProgressMonitor monitor)
 //            throws DBException {
-//        return (List<? extends TurboGraphPPTableColumn>) super.getAttributes(monitor);
+//        return (List<? extends TurboGraphPPVertexColumn>) super.getAttributes(monitor);
 //    }
     
     @Override

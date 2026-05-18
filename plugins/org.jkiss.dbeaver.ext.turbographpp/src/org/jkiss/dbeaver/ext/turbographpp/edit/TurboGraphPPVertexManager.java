@@ -20,7 +20,7 @@ import org.jkiss.code.NotNull;
 import org.jkiss.dbeaver.ext.generic.edit.GenericTableManager;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 
-public class TurboGraphPPTableManager extends GenericTableManager
+public class TurboGraphPPVertexManager extends GenericTableManager
 {
     @Override
     public boolean canCreateObject(@NotNull Object container) {

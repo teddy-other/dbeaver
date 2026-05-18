@@ -27,24 +27,44 @@
             label="turbograph jdbc"
             dialect="turbographpp">
             <tree path="turbographpp" label="TurboGraph++ data source" supportsEntityMerge="true">
-                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPTable" label="%tree.table.node.name" icon="#folder_table" description="%tree.tables.node.name">
-	                  <items label="%tree.table.node.name" path="table" property="physicalTables" icon="#table">
-	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPTableColumn" label="%tree.column.node.name" icon="#columns" description="%tree.columns.node.tip">
-	                        <items label="%tree.column.node.name" path="nodeproperties" property="attributes" icon="#column">
-	                        </items>
+            	<folder id="schemas" type="org.jkiss.dbeaver.ext.turbographpp.model.CoradbUser" label="%tree.schemas.node.name"
+                        icon="#folder_schema" description="%tree.schemas.node.tip">
+                    <items label="%tree.user.node.name" path="coradbUser" property="coradbUsers" icon="#schema">
+	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPVertex" label="%tree.table.node.name" icon="#folder_table" description="%tree.tables.node.name">
+		                  <items label="%tree.table.node.name" path="table" property="physicalTables" icon="#table">
+		                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPTVertexColumn" label="%tree.column.node.name" icon="#columns" description="%tree.columns.node.tip">
+		                        <items label="%tree.column.node.name" path="nodeproperties" property="attributes" icon="#column">
+		                        </items>
+		                    </folder>
+		                  </items>
 	                    </folder>
-	                  </items>
-                    </folder>
-                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPView" label="%tree.table.edge.name" icon="#folder_view" description="%tree.table.edge.name">
-                      <items label="%tree.table.edge.name" path="view" property="views" icon="#view">
-                        <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPTableColumn" label="%tree.column.edge.name" icon="#columns" description="%tree.column.edge.tip">
-                          <items label="%tree.column.node.name" path="edgeproperties" property="attributes" icon="#column">
-                          </items>
-                        </folder>
-                      </items>
-                    </folder>
+	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPEdge" label="%tree.table.edge.name" icon="#folder_view" description="%tree.table.edge.name">
+	                      <items label="%tree.table.edge.name" path="view" property="views" icon="#view">
+	                        <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPEdgeColumn" label="%tree.column.edge.name" icon="#columns" description="%tree.column.edge.tip">
+	                          <items label="%tree.column.node.name" path="edgeproperties" property="attributes" icon="#column">
+	                          </items>
+	                        </folder>
+	                      </items>
+	                    </folder>
+					</items>
+				</folder>
             </tree>
             <drivers managable="true">
+                    <driver
+                        id="coradb_jdbc"
+                        label="CORADB"
+                        icon="icons/coradb_icon.png"
+                        iconBig="icons/coradb_icon_big.png"
+                        class="coradb.jdbc.driver.CORADBDriver"
+                        sampleURL="jdbc:coradb:{host}:{port}:{database}:::"
+                        defaultPort="30000"
+                        description="CORADB JDBC driver"
+                        supportedConfigurationTypes="MANUAL,URL"
+                        webURL="https://www.cubrid.org/manual/en/11.2/api/jdbc.html#configuration-connection"
+                        categories="sql">
+                        <file type="jar" path="driver/coradb"/>
+                        <parameter name="stored-unquoted-case" value="UPPER"/>
+                    </driver>
             		<driver
                         id="vit_turbograph_jdbc"
                         label="TurboGraph++"
@@ -127,10 +147,10 @@
     </extension>
 
     <extension point="org.jkiss.dbeaver.objectManager">
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPTableManager"         objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPTable"/>
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPViewManager"          objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPView"/>
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPTableColumnManager"   objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPTableColumn"/>
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPViewManager"          objectType="org.jkiss.dbeaver.ext.turbographpp.model.Neo4jEdge"/>
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPTableColumnManager"   objectType="org.jkiss.dbeaver.ext.turbographpp.model.Neo4jProperty"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPVertexManager"         objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPVertex"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPEdgeManager"          objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPEdge"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPVertexColumnManager"   objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPVertexColumn"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPEdgeManager"          objectType="org.jkiss.dbeaver.ext.turbographpp.model.Neo4jEdge"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPVertexColumnManager"   objectType="org.jkiss.dbeaver.ext.turbographpp.model.Neo4jProperty"/>
     </extension>
 </plugin>

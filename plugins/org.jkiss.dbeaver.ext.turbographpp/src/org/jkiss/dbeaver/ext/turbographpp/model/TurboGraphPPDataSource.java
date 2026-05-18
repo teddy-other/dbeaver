@@ -23,10 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.jkiss.code.NotNull;
+import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.DBDatabaseException;
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.ext.generic.model.GenericDataSource;
 import org.jkiss.dbeaver.ext.generic.model.GenericDataSourceInfo;
+import org.jkiss.dbeaver.ext.generic.model.GenericSchema;
 import org.jkiss.dbeaver.ext.generic.model.GenericView;
 import org.jkiss.dbeaver.ext.generic.model.meta.GenericMetaModel;
 import org.jkiss.dbeaver.ext.turbographpp.model.meta.TurboGraphPPMetaModel;
@@ -38,8 +40,10 @@ import org.jkiss.dbeaver.model.exec.jdbc.JDBCDatabaseMetaData;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCPreparedStatement;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
+import org.jkiss.dbeaver.model.exec.jdbc.JDBCStatement;
 import org.jkiss.dbeaver.model.exec.plan.DBCQueryPlanner;
 import org.jkiss.dbeaver.model.impl.jdbc.JDBCUtils;
+import org.jkiss.dbeaver.model.impl.jdbc.cache.JDBCObjectCache;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 import org.jkiss.dbeaver.model.struct.DBSObject;
 
@@ -47,8 +51,9 @@ public class TurboGraphPPDataSource extends GenericDataSource {
 
 	private boolean isTurboGraph = false;
     private DBPDataSourceInfo dataSourceInfo;
-    private List<TurboGraphPPView> edges;
-    private List<? extends TurboGraphPPTable> nodes;
+    private List<TurboGraphPPEdge> edges;
+    private List<? extends TurboGraphPPVertex> nodes;
+    private CoradbUserCache userCache;
 
 
 	public TurboGraphPPDataSource(DBRProgressMonitor monitor, DBPDataSourceContainer container, TurboGraphPPMetaModel metaModel,
@@ -57,7 +62,13 @@ public class TurboGraphPPDataSource extends GenericDataSource {
 		if (container.getDriver().getDriverClassName().contains("turbograph")) {
             isTurboGraph = true;
         }
+		this.userCache = new CoradbUserCache();
 
+	}
+	
+	@Override
+	public TurboGraphPPDataSource getDataSource() {
+		return this;
 	}
    
     public boolean isTurboGraph() {
@@ -75,18 +86,22 @@ public class TurboGraphPPDataSource extends GenericDataSource {
         return super.refreshObject(monitor);
     }
     
-    public List<?  extends TurboGraphPPView> getEdges(DBRProgressMonitor monitor) throws DBException {
+    public List<CoradbUser> getCoradbUsers(@NotNull DBRProgressMonitor monitor) throws DBException {
+        return userCache.getAllObjects(monitor, this);
+    }
+    
+    public List<?  extends TurboGraphPPEdge> getEdges(DBRProgressMonitor monitor) throws DBException {
         if (edges == null) {
-            edges = (List<TurboGraphPPView>) loadEdges(monitor);
+            edges = (List<TurboGraphPPEdge>) loadEdges(monitor);
         }
         return edges;
     }
     
-    private TurboGraphPPView getEdge(DBRProgressMonitor monitor, String edgeName) throws DBException {
+    private TurboGraphPPEdge getEdge(DBRProgressMonitor monitor, String edgeName) throws DBException {
         if (edges != null) {
             Iterator itr = edges.iterator();
             while(itr.hasNext()) {
-                TurboGraphPPView edge = (TurboGraphPPView) itr.next();
+                TurboGraphPPEdge edge = (TurboGraphPPEdge) itr.next();
                 if (edge.getName().equals(edgeName)) {
                     return edge;
                 }
@@ -95,7 +110,7 @@ public class TurboGraphPPDataSource extends GenericDataSource {
         return null;
     }
     
-    private List<? extends TurboGraphPPView> loadEdges(DBRProgressMonitor monitor) throws DBException {
+    private List<? extends TurboGraphPPEdge> loadEdges(DBRProgressMonitor monitor) throws DBException {
         if (edges != null) {
             return edges;
         }
@@ -157,6 +172,32 @@ public class TurboGraphPPDataSource extends GenericDataSource {
             }
         }
         return super.getAdapter(adapter);
+    }
+    
+    public class CoradbUserCache extends JDBCObjectCache<TurboGraphPPDataSource, CoradbUser> {
+        @NotNull
+        @Override
+        protected JDBCStatement prepareObjectsStatement(
+                @NotNull JDBCSession session,
+                @NotNull TurboGraphPPDataSource container)
+                throws SQLException {
+            String sql = "select name, comment from db_user";
+            final JDBCPreparedStatement dbStat = session.prepareStatement(sql);
+            return dbStat;
+        }
+
+        @Nullable
+        @Override
+        protected CoradbUser fetchObject(
+                @NotNull JDBCSession session,
+                @NotNull TurboGraphPPDataSource container,
+                @NotNull JDBCResultSet dbResult)
+                throws SQLException, DBException {
+            String name = JDBCUtils.safeGetString(dbResult, "name");
+            String comment = JDBCUtils.safeGetString(dbResult, "comment");
+            return new CoradbUser(container, name, comment);
+        }
+
     }
 
 }

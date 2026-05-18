@@ -9,7 +9,8 @@ Require-Bundle: org.jkiss.dbeaver.model,
  org.jkiss.dbeaver.data.gis,
  org.jkiss.dbeaver.registry,
  org.jkiss.dbeaver.tasks.native,
- org.jkiss.dbeaver.ext.generic
+ org.jkiss.dbeaver.ext.generic,
+ org.jkiss.dbeaver.ext.cubrid;bundle-version="[1.0.0,2.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-Vendor: JKISS

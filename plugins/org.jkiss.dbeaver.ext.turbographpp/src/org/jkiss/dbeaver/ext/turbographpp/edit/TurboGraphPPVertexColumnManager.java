@@ -19,7 +19,7 @@ package org.jkiss.dbeaver.ext.turbographpp.edit;
 import org.jkiss.dbeaver.ext.generic.edit.GenericTableColumnManager;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableColumn;
 
-public class TurboGraphPPTableColumnManager extends GenericTableColumnManager
+public class TurboGraphPPVertexColumnManager extends GenericTableColumnManager
 {
     @Override
     public boolean canCreateObject(Object container) {
