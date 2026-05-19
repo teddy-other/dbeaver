@@ -49,7 +49,7 @@ import org.jkiss.dbeaver.model.struct.DBSObject;
 
 public class TurboGraphPPDataSource extends GenericDataSource {
 
-	private boolean isTurboGraph = false;
+	private boolean isNeo4j = false;
     private DBPDataSourceInfo dataSourceInfo;
     private List<TurboGraphPPEdge> edges;
     private List<? extends TurboGraphPPVertex> nodes;
@@ -59,8 +59,8 @@ public class TurboGraphPPDataSource extends GenericDataSource {
 	public TurboGraphPPDataSource(DBRProgressMonitor monitor, DBPDataSourceContainer container, TurboGraphPPMetaModel metaModel,
 			TurboPPSQLDialect dialect) throws DBException {
 		super(monitor, container, metaModel, dialect);
-		if (container.getDriver().getDriverClassName().contains("turbograph")) {
-            isTurboGraph = true;
+		if (container.getDriver().getDriverClassName().contains("neo4j")) {
+			isNeo4j = true;
         }
 		this.userCache = new CoradbUserCache();
 
@@ -71,8 +71,8 @@ public class TurboGraphPPDataSource extends GenericDataSource {
 		return this;
 	}
    
-    public boolean isTurboGraph() {
-        return isTurboGraph;
+    public boolean isNeo4j() {
+        return isNeo4j;
     }
 
     @Override
@@ -88,6 +88,13 @@ public class TurboGraphPPDataSource extends GenericDataSource {
     
     public List<CoradbUser> getCoradbUsers(@NotNull DBRProgressMonitor monitor) throws DBException {
         return userCache.getAllObjects(monitor, this);
+    }
+    
+    public List<? extends TurboGraphPPVertex> getVertexs(DBRProgressMonitor monitor) throws DBException {
+    	if (nodes == null) {
+    		nodes = (List<TurboGraphPPVertex>) loadVertex(monitor);
+    	}
+    	return nodes;
     }
     
     public List<?  extends TurboGraphPPEdge> getEdges(DBRProgressMonitor monitor) throws DBException {
@@ -110,6 +117,29 @@ public class TurboGraphPPDataSource extends GenericDataSource {
         return null;
     }
     
+    private List<? extends TurboGraphPPVertex> loadVertex(DBRProgressMonitor monitor) throws DBException {
+        if (nodes != null) {
+            return nodes;
+        }
+        
+        List<TurboGraphPPVertex> vertexList = new ArrayList<TurboGraphPPVertex>();
+        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
+            try (JDBCPreparedStatement dbStat =
+                    session.prepareStatement("select * from db_class where class_type = 'VERTEX'")) {
+                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
+                    while (dbResult.next()) {
+                        String class_name = JDBCUtils.safeGetString(dbResult, "class_name");
+                        TurboGraphPPVertex vertex = new TurboGraphPPVertex(this.getObject(), class_name, "", dbResult);
+                        vertexList.add(vertex);
+                    }
+                    return vertexList;
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DBDatabaseException(ex, this);
+        }
+    }
+    
     private List<? extends TurboGraphPPEdge> loadEdges(DBRProgressMonitor monitor) throws DBException {
         if (edges != null) {
             return edges;
@@ -118,7 +148,7 @@ public class TurboGraphPPDataSource extends GenericDataSource {
         List<Neo4jEdge> edgeList = new ArrayList<Neo4jEdge>();
         try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
             try (JDBCPreparedStatement dbStat =
-                    session.prepareStatement("CALL db.relationshipTypes()")) {
+            		session.prepareStatement("select * from db_class where class_type = 'EDGE'")) {
                 try (JDBCResultSet dbResult = dbStat.executeQuery()) {
                     while (dbResult.next()) {
                         String edgeType = JDBCUtils.safeGetString(dbResult, "relationshipType");
@@ -135,7 +165,7 @@ public class TurboGraphPPDataSource extends GenericDataSource {
     
     @Override
     public List<? extends GenericView> getViews(DBRProgressMonitor monitor) throws DBException {
-        if (!this.isTurboGraph) {
+        if (this.isNeo4j) {
             return getEdges(monitor);
         }
         return super.getViews(monitor);
@@ -146,7 +176,7 @@ public class TurboGraphPPDataSource extends GenericDataSource {
             throws DBException {
         List<Object> ret = new ArrayList<Object>();
         ret.addAll(super.getChildren(monitor));
-        if (!this.isTurboGraph) {
+        if (this.isNeo4j) {
             ret.addAll(getEdges(monitor));
         }
         return (Collection<? extends DBSObject>) ret;
@@ -154,7 +184,7 @@ public class TurboGraphPPDataSource extends GenericDataSource {
     
     @Override
     public DBSObject getChild(DBRProgressMonitor monitor, String childName) throws DBException {
-        if (!this.isTurboGraph) {
+        if (this.isNeo4j) {
             DBSObject obj = (DBSObject) this.getEdge(monitor, childName);
             if (obj == null) {
                 obj = super.getChild(monitor, childName);
@@ -166,7 +196,7 @@ public class TurboGraphPPDataSource extends GenericDataSource {
 
     @Override
     public <T> T getAdapter(Class<T> adapter) {
-        if (this.isTurboGraph) {
+        if (!this.isNeo4j) {
             if (adapter == DBCQueryPlanner.class) {
                 return adapter.cast(new TurboGraphPPPlanAnalyser(this));
             }
@@ -181,7 +211,12 @@ public class TurboGraphPPDataSource extends GenericDataSource {
                 @NotNull JDBCSession session,
                 @NotNull TurboGraphPPDataSource container)
                 throws SQLException {
-            String sql = "select name, comment from db_user";
+        	String sql;
+        	if (container.isNeo4j()) {
+        		sql = "SHOW HOME DATABASE YIELD name";
+        	} else {
+        		sql = "select name, comment from db_user";
+        	}
             final JDBCPreparedStatement dbStat = session.prepareStatement(sql);
             return dbStat;
         }
@@ -194,7 +229,10 @@ public class TurboGraphPPDataSource extends GenericDataSource {
                 @NotNull JDBCResultSet dbResult)
                 throws SQLException, DBException {
             String name = JDBCUtils.safeGetString(dbResult, "name");
-            String comment = JDBCUtils.safeGetString(dbResult, "comment");
+            String comment = "";
+            if (!container.isNeo4j) {
+            	comment = JDBCUtils.safeGetString(dbResult, "comment");
+            }
             return new CoradbUser(container, name, comment);
         }
 

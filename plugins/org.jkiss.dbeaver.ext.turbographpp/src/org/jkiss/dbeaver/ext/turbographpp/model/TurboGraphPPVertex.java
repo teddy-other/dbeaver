@@ -64,12 +64,6 @@ public class TurboGraphPPVertex extends GenericTable {
     @Override
     public List<TurboGraphPPVertexColumn> getAttributes(DBRProgressMonitor monitor)
             throws DBException {
-        if (!((TurboGraphPPDataSource)this.getDataSource()).isTurboGraph()) {
-            if (properties != null) {
-                return properties;
-            }
-            return this.getProperties(monitor);
-        }
         return (List<TurboGraphPPVertexColumn>) super.getAttributes(monitor);
     }
     
@@ -105,8 +99,8 @@ public class TurboGraphPPVertex extends GenericTable {
         }
 
         StringBuilder query = new StringBuilder(100);
-        query.append("MATCH (n: ").append(getFullyQualifiedName(DBPEvaluationContext.DML));
-        query.append(") RETURN n");
+        query.append("select ").append(getFullyQualifiedName(DBPEvaluationContext.DML));
+        query.append(" from ").append(getFullyQualifiedName(DBPEvaluationContext.DML));
 
         String sqlQuery = query.toString();
         statistics.setQueryText(sqlQuery);
@@ -148,13 +142,11 @@ public class TurboGraphPPVertex extends GenericTable {
                         }
                         fetchProgress.dumpStatistics(statistics);
                     } finally {
-                        // First - close cursor
                         try {
                             dbResult.close();
                         } catch (Throwable e) {
                             log.error("Error closing result set", e); //$NON-NLS-1$
                         }
-                        // Then - signal that fetch was ended
                         try {
                             dataReceiver.fetchEnd(session, dbResult);
                         } catch (Throwable e) {

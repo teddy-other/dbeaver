@@ -120,8 +120,12 @@ public class DBeaverIcons {
                 }
             }
             default -> {
-                log.error("Unexpected image of type " + image.getClass());
-                return getIconDescriptor(DBIcon.TYPE_UNKNOWN, useCache);
+                IconDescriptor icon = getIconByLocation(image.getLocation());
+                if (icon == null) {
+                    log.error("Image '" + image.getLocation() + "' not found (type " + image.getClass().getName() + ")");
+                    return getIconDescriptor(DBIcon.TYPE_UNKNOWN, useCache);
+                }
+                return icon;
             }
         }
     }

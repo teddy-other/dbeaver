@@ -38,7 +38,7 @@ import org.jkiss.dbeaver.runtime.DBWorkbench;
 public class GetChartInfoAllJob extends AbstractJob {
 
     protected TurboGraphPPDataSource dataSource;
-    protected boolean isTurboGraph = false;
+    protected boolean isNeo4j = false;
 
     protected GraphChart graphChart;
     protected String infoLabel;
@@ -63,7 +63,7 @@ public class GetChartInfoAllJob extends AbstractJob {
         this.graphChart = chart;
         this.infoLabel = label;
         this.infoProperty = property;
-        this.isTurboGraph = this.dataSource.isTurboGraph();
+        this.isNeo4j = this.dataSource.isNeo4j();
     }
 
     @Override
@@ -166,7 +166,7 @@ public class GetChartInfoAllJob extends AbstractJob {
             toVal = "date('" + toVal + "')";
         }
 
-        if (isTurboGraph) {
+        if (!isNeo4j) {
             if (fromVal.indexOf("-") == 0) {
                 fromVal = String.valueOf("0" + fromVal);
             }
@@ -211,7 +211,7 @@ public class GetChartInfoAllJob extends AbstractJob {
 
     private boolean checkSupportType(String simpleTypeName) {
 
-        if (dataSource.isTurboGraph()) {
+        if (!dataSource.isNeo4j()) {
             return true;
         }
 

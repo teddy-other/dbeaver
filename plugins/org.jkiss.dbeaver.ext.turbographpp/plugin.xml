@@ -31,7 +31,7 @@
                         icon="#folder_schema" description="%tree.schemas.node.tip">
                     <items label="%tree.user.node.name" path="coradbUser" property="coradbUsers" icon="#schema">
 	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPVertex" label="%tree.table.node.name" icon="#folder_table" description="%tree.tables.node.name">
-		                  <items label="%tree.table.node.name" path="table" property="physicalTables" icon="#table">
+		                  <items label="%tree.table.node.name" path="vertex" property="vertexs" icon="#table">
 		                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPTVertexColumn" label="%tree.column.node.name" icon="#columns" description="%tree.columns.node.tip">
 		                        <items label="%tree.column.node.name" path="nodeproperties" property="attributes" icon="#column">
 		                        </items>
@@ -39,7 +39,7 @@
 		                  </items>
 	                    </folder>
 	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPEdge" label="%tree.table.edge.name" icon="#folder_view" description="%tree.table.edge.name">
-	                      <items label="%tree.table.edge.name" path="view" property="views" icon="#view">
+	                      <items label="%tree.table.edge.name" path="edge" property="edges" icon="#view">
 	                        <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPEdgeColumn" label="%tree.column.edge.name" icon="#columns" description="%tree.column.edge.tip">
 	                          <items label="%tree.column.node.name" path="edgeproperties" property="attributes" icon="#column">
 	                          </items>

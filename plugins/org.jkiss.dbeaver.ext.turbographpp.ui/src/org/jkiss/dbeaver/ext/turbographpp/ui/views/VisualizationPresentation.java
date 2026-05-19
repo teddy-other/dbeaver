@@ -56,6 +56,7 @@ import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.ModelPreferences;
 import org.jkiss.dbeaver.ext.turbographpp.graph.FXGraph;
 import org.jkiss.dbeaver.ext.turbographpp.graph.GraphBase.LayoutStyle;
+import org.jkiss.dbeaver.ext.turbographpp.graph.GraphIcons;
 import org.jkiss.dbeaver.ext.turbographpp.graph.UIIcon;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.DataRowID;
 import org.jkiss.dbeaver.ext.turbographpp.ui.internal.TurboGraphPPUIMessages;
@@ -367,7 +368,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         menuComposite0.setLayout(new GridLayout(1, true));
 
         Button detachButton = new Button(menuComposite0, SWT.PUSH);
-        detachButton.setImage(DBeaverIcons.getImage(UIIcon.BUTTON_DETACH_WINDOW));
+        detachButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_DETACH_WINDOW));
         detachButton.setToolTipText(
                 TurboGraphPPUIMessages.visualization_detach_window_button_tool_tip);
         detachButton.setData(ImageButton.DETACH_WINDOW);
@@ -383,7 +384,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         menuComposite1.setLayout(new GridLayout(1, true));
 
         Button MiniMapButton = new Button(menuComposite1, SWT.PUSH);
-        MiniMapButton.setImage(DBeaverIcons.getImage(UIIcon.BUTTON_MINI_MAP));
+        MiniMapButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_MINI_MAP));
         MiniMapButton.setToolTipText(
                 TurboGraphPPUIMessages.visualization_minimap_window_button_tool_tip);
         MiniMapButton.setData(ImageButton.MINI_MAP);
@@ -421,7 +422,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         menuComposite3.setLayout(new GridLayout(2, true));
 
         shortestButton = new Button(menuComposite3, SWT.PUSH);
-        shortestButton.setImage(DBeaverIcons.getImage(UIIcon.BUTTON_SHORTEST_PATH));
+        shortestButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_SHORTEST_PATH));
         shortestButton.setToolTipText(
                 TurboGraphPPUIMessages.visualization_shortest_button_tool_tip);
         shortestButton.setData(ImageButton.SHORTEST);
@@ -430,7 +431,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         graphButtonList.add(shortestButton);
 
         button1 = new Button(menuComposite3, SWT.PUSH);
-        button1.setImage(DBeaverIcons.getImage(UIIcon.CHART_BAR));
+        button1.setImage(GraphIcons.getImage(UIIcon.CHART_BAR));
         button1.setToolTipText(TurboGraphPPUIMessages.visualization_chart_button_tool_tip);
         button1.setData(ImageButton.CHART);
         button1.addSelectionListener(imageButtonListener);
@@ -447,7 +448,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         menuComposite4.setLayout(new GridLayout(4, true));
 
         button1 = new Button(menuComposite4, SWT.PUSH);
-        button1.setImage(DBeaverIcons.getImage(UIIcon.PROPERTIES));
+        button1.setImage(GraphIcons.getImage(UIIcon.PROPERTIES));
         button1.setToolTipText(TurboGraphPPUIMessages.visualization_value_button_tool_tip);
         button1.setData(ImageButton.VALUE);
         button1.addSelectionListener(imageButtonListener);
@@ -455,7 +456,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         graphButtonList.add(button1);
 
         button1 = new Button(menuComposite4, SWT.PUSH);
-        button1.setImage(DBeaverIcons.getImage(UIIcon.BUTTON_DESIGN));
+        button1.setImage(GraphIcons.getImage(UIIcon.BUTTON_DESIGN));
         button1.setToolTipText(TurboGraphPPUIMessages.visualization_open_design_edit_button_tool_tip);
         button1.setData(ImageButton.DESIGN);
         button1.addSelectionListener(imageButtonListener);
@@ -463,7 +464,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         graphButtonList.add(button1);
 
         button1 = new Button(menuComposite4, SWT.PUSH);
-        button1.setImage(DBeaverIcons.getImage(UIIcon.BUTTON_CAPTURE));
+        button1.setImage(GraphIcons.getImage(UIIcon.BUTTON_CAPTURE));
         button1.setToolTipText(TurboGraphPPUIMessages.visualization_capture_button_tool_tip);
         button1.setData(ImageButton.CAPTURE);
         button1.addSelectionListener(imageButtonListener);
@@ -471,7 +472,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         graphButtonList.add(button1);
 
         button1 = new Button(menuComposite4, SWT.PUSH);
-        button1.setImage(DBeaverIcons.getImage(UIIcon.BUTTON_CSV_FILE));
+        button1.setImage(GraphIcons.getImage(UIIcon.BUTTON_CSV_FILE));
         button1.setToolTipText(TurboGraphPPUIMessages.visualization_to_csv_file_button_tool_tip);
         button1.setData(ImageButton.TO_CSV);
         button1.addSelectionListener(imageButtonListener);
@@ -487,7 +488,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         menuComposite5.setLayout(new GridLayout(2, false));
 
         fetchNextButton = new Button(menuComposite5, SWT.PUSH);
-        fetchNextButton.setImage(DBeaverIcons.getImage(UIIcon.BUTTON_FETCH_NEXT));
+        fetchNextButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_FETCH_NEXT));
         fetchNextButton.setToolTipText(TurboGraphPPUIMessages.visualization_next_data_button_tool_tip);
         fetchNextButton.setData(ImageButton.NEXT_DATA);
         fetchNextButton.addSelectionListener(imageButtonListener);
@@ -495,7 +496,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         fetchNextButton.pack();
 
         fetchEndButton = new Button(menuComposite5, SWT.PUSH);
-        fetchEndButton.setImage(DBeaverIcons.getImage(UIIcon.BUTTON_FETCH_ALL));
+        fetchEndButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_FETCH_ALL));
         fetchEndButton.setToolTipText(TurboGraphPPUIMessages.visualization_all_data_button_tool_tip);
         fetchEndButton.setData(ImageButton.ALL_DATA);
         fetchEndButton.addSelectionListener(imageButtonListener);
