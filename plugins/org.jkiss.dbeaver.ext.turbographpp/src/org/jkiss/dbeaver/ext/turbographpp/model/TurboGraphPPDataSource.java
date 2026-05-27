@@ -90,109 +90,109 @@ public class TurboGraphPPDataSource extends GenericDataSource {
         return userCache.getAllObjects(monitor, this);
     }
     
-    public List<? extends TurboGraphPPVertex> getVertexs(DBRProgressMonitor monitor) throws DBException {
-    	if (nodes == null) {
-    		nodes = (List<TurboGraphPPVertex>) loadVertex(monitor);
-    	}
-    	return nodes;
-    }
+//    public List<? extends TurboGraphPPVertex> getVertexs(DBRProgressMonitor monitor) throws DBException {
+//    	if (nodes == null) {
+//    		nodes = (List<TurboGraphPPVertex>) loadVertex(monitor);
+//    	}
+//    	return nodes;
+//    }
+//    
+//    public List<?  extends TurboGraphPPEdge> getEdges(DBRProgressMonitor monitor) throws DBException {
+//        if (edges == null) {
+//            edges = (List<TurboGraphPPEdge>) loadEdges(monitor);
+//        }
+//        return edges;
+//    }
+//    
+//    private TurboGraphPPEdge getEdge(DBRProgressMonitor monitor, String edgeName) throws DBException {
+//        if (edges != null) {
+//            Iterator itr = edges.iterator();
+//            while(itr.hasNext()) {
+//                TurboGraphPPEdge edge = (TurboGraphPPEdge) itr.next();
+//                if (edge.getName().equals(edgeName)) {
+//                    return edge;
+//                }
+//            }
+//        }
+//        return null;
+//    }
+//    
+//    private List<? extends TurboGraphPPVertex> loadVertex(DBRProgressMonitor monitor) throws DBException {
+//        if (nodes != null) {
+//            return nodes;
+//        }
+//        
+//        List<TurboGraphPPVertex> vertexList = new ArrayList<TurboGraphPPVertex>();
+//        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
+//            try (JDBCPreparedStatement dbStat =
+//                    session.prepareStatement("select * from db_class where class_type = 'VERTEX'")) {
+//                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
+//                    while (dbResult.next()) {
+//                        String class_name = JDBCUtils.safeGetString(dbResult, "class_name");
+//                        TurboGraphPPVertex vertex = new TurboGraphPPVertex(this.getObject(), class_name, "", dbResult);
+//                        vertexList.add(vertex);
+//                    }
+//                    return vertexList;
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            throw new DBDatabaseException(ex, this);
+//        }
+//    }
+//    
+//    private List<? extends TurboGraphPPEdge> loadEdges(DBRProgressMonitor monitor) throws DBException {
+//        if (edges != null) {
+//            return edges;
+//        }
+//        
+//        List<Neo4jEdge> edgeList = new ArrayList<Neo4jEdge>();
+//        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
+//            try (JDBCPreparedStatement dbStat =
+//            		session.prepareStatement("select * from db_class where class_type = 'EDGE'")) {
+//                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
+//                    while (dbResult.next()) {
+//                        String edgeType = JDBCUtils.safeGetString(dbResult, "relationshipType");
+//                        Neo4jEdge neo4jEdge = new Neo4jEdge(this.getObject(), edgeType, dbResult);
+//                        edgeList.add(neo4jEdge);
+//                    }
+//                    return edgeList;
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            throw new DBDatabaseException(ex, this);
+//        }
+//    }
+//    
+//    @Override
+//    public List<? extends GenericView> getViews(DBRProgressMonitor monitor) throws DBException {
+//        if (this.isNeo4j) {
+//            return getEdges(monitor);
+//        }
+//        return super.getViews(monitor);
+//    }
     
-    public List<?  extends TurboGraphPPEdge> getEdges(DBRProgressMonitor monitor) throws DBException {
-        if (edges == null) {
-            edges = (List<TurboGraphPPEdge>) loadEdges(monitor);
-        }
-        return edges;
-    }
+//    @Override
+//    public Collection<? extends DBSObject> getChildren(DBRProgressMonitor monitor)
+//            throws DBException {
+//        List<Object> ret = new ArrayList<Object>();
+//        ret.addAll(super.getChildren(monitor));
+//        if (this.isNeo4j) {
+//            ret.addAll(getEdges(monitor));
+//        }
+//        return (Collection<? extends DBSObject>) ret;
+//    }
     
-    private TurboGraphPPEdge getEdge(DBRProgressMonitor monitor, String edgeName) throws DBException {
-        if (edges != null) {
-            Iterator itr = edges.iterator();
-            while(itr.hasNext()) {
-                TurboGraphPPEdge edge = (TurboGraphPPEdge) itr.next();
-                if (edge.getName().equals(edgeName)) {
-                    return edge;
-                }
-            }
-        }
-        return null;
-    }
-    
-    private List<? extends TurboGraphPPVertex> loadVertex(DBRProgressMonitor monitor) throws DBException {
-        if (nodes != null) {
-            return nodes;
-        }
-        
-        List<TurboGraphPPVertex> vertexList = new ArrayList<TurboGraphPPVertex>();
-        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
-            try (JDBCPreparedStatement dbStat =
-                    session.prepareStatement("select * from db_class where class_type = 'VERTEX'")) {
-                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
-                    while (dbResult.next()) {
-                        String class_name = JDBCUtils.safeGetString(dbResult, "class_name");
-                        TurboGraphPPVertex vertex = new TurboGraphPPVertex(this.getObject(), class_name, "", dbResult);
-                        vertexList.add(vertex);
-                    }
-                    return vertexList;
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DBDatabaseException(ex, this);
-        }
-    }
-    
-    private List<? extends TurboGraphPPEdge> loadEdges(DBRProgressMonitor monitor) throws DBException {
-        if (edges != null) {
-            return edges;
-        }
-        
-        List<Neo4jEdge> edgeList = new ArrayList<Neo4jEdge>();
-        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
-            try (JDBCPreparedStatement dbStat =
-            		session.prepareStatement("select * from db_class where class_type = 'EDGE'")) {
-                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
-                    while (dbResult.next()) {
-                        String edgeType = JDBCUtils.safeGetString(dbResult, "relationshipType");
-                        Neo4jEdge neo4jEdge = new Neo4jEdge(this.getObject(), edgeType, dbResult);
-                        edgeList.add(neo4jEdge);
-                    }
-                    return edgeList;
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DBDatabaseException(ex, this);
-        }
-    }
-    
-    @Override
-    public List<? extends GenericView> getViews(DBRProgressMonitor monitor) throws DBException {
-        if (this.isNeo4j) {
-            return getEdges(monitor);
-        }
-        return super.getViews(monitor);
-    }
-    
-    @Override
-    public Collection<? extends DBSObject> getChildren(DBRProgressMonitor monitor)
-            throws DBException {
-        List<Object> ret = new ArrayList<Object>();
-        ret.addAll(super.getChildren(monitor));
-        if (this.isNeo4j) {
-            ret.addAll(getEdges(monitor));
-        }
-        return (Collection<? extends DBSObject>) ret;
-    }
-    
-    @Override
-    public DBSObject getChild(DBRProgressMonitor monitor, String childName) throws DBException {
-        if (this.isNeo4j) {
-            DBSObject obj = (DBSObject) this.getEdge(monitor, childName);
-            if (obj == null) {
-                obj = super.getChild(monitor, childName);
-            }
-            return obj;
-        } 
-        return super.getChild(monitor,childName);
-    } 
+//    @Override
+//    public DBSObject getChild(DBRProgressMonitor monitor, String childName) throws DBException {
+//        if (this.isNeo4j) {
+//            DBSObject obj = (DBSObject) this.getEdge(monitor, childName);
+//            if (obj == null) {
+//                obj = super.getChild(monitor, childName);
+//            }
+//            return obj;
+//        } 
+//        return super.getChild(monitor,childName);
+//    } 
 
     @Override
     public <T> T getAdapter(Class<T> adapter) {

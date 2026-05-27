@@ -66,8 +66,6 @@ import org.jkiss.dbeaver.model.data.DBDAttributeBinding;
 import org.jkiss.dbeaver.model.data.DBDDisplayFormat;
 import org.jkiss.dbeaver.model.impl.data.DBDValueError;
 import org.jkiss.dbeaver.model.preferences.DBPPreferenceStore;
-import org.jkiss.dbeaver.ui.DBeaverIcons;
-import org.jkiss.dbeaver.ui.UIStyles;
 import org.jkiss.dbeaver.ui.UIUtils;
 import org.jkiss.dbeaver.ui.controls.resultset.AbstractPresentation;
 import org.jkiss.dbeaver.ui.controls.resultset.IResultSetController;
@@ -179,8 +177,6 @@ public class VisualizationPresentation extends AbstractPresentation implements I
                 new FXGraph(
                         graphTopComposite, SWT.NONE, controller.getDataContainer().getDataSource());
         visualGraph.setCursor(graphTopComposite.getDisplay().getSystemCursor(SWT.CURSOR_IBEAM));
-        visualGraph.setForeground(UIStyles.getDefaultTextForeground());
-        visualGraph.setBackground(UIStyles.getDefaultTextBackground());
         visualGraph.setFont(UIUtils.getMonospaceFont());
         visualGraph.setLayout(new FillLayout(SWT.FILL));
         visualGraph.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -219,21 +215,66 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
     @Override
     protected void applyThemeSettings(ITheme currentTheme) {
-        Font rsFont = ResultSetThemeSettings.instance.resultSetFont;
-        if (rsFont != null) {
-            int fontHeight = rsFont.getFontData()[0].getHeight();
-            Font font = UIUtils.getMonospaceFont();
+        Color background = controller.getDefaultBackground();
+        Color foreground = controller.getDefaultForeground();
 
-            FontData[] fontData = font.getFontData();
-            fontData[0].setHeight(fontHeight);
-            Font newFont = new Font(font.getDevice(), fontData[0]);
+        applyThemeToControl(parentComposite, background, foreground);
+        applyThemeToControl(mainComposite, background, foreground);
+        applyThemeToControl(menuBarComposite, background, foreground);
+        applyThemeToControl(graphTopComposite, background, foreground);
 
-            visualGraph.setFont(newFont);
-
-            if (monoFont != null) {
-                UIUtils.dispose(monoFont);
+        if (coolBar != null && !coolBar.isDisposed()) {
+            coolBar.setBackground(background);
+            coolBar.setForeground(foreground);
+            for (Control child : coolBar.getChildren()) {
+                applyThemeToControl(child, background, foreground);
             }
-            monoFont = newFont;
+        }
+
+        if (resultLabel != null && !resultLabel.isDisposed()) {
+            resultLabel.setBackground(background);
+            resultLabel.setForeground(foreground);
+        }
+
+        if (visualGraph != null) {
+            visualGraph.setBackground(background);
+            visualGraph.setForeground(foreground);
+
+            Font rsFont = ResultSetThemeSettings.instance.resultSetFont;
+            if (rsFont != null) {
+                int fontHeight = rsFont.getFontData()[0].getHeight();
+                Font font = UIUtils.getMonospaceFont();
+
+                FontData[] fontData = font.getFontData();
+                fontData[0].setHeight(fontHeight);
+                Font newFont = new Font(font.getDevice(), fontData[0]);
+
+                visualGraph.setFont(newFont);
+
+                if (monoFont != null) {
+                    UIUtils.dispose(monoFont);
+                }
+                monoFont = newFont;
+            }
+        }
+
+        if (visualGraph != null && visualGraph.getShortestMode()) {
+            setColorShortestButton(true);
+        }
+    }
+
+    private void applyThemeToControl(@Nullable Control control, @NotNull Color background, @NotNull Color foreground) {
+        if (control == null || control.isDisposed()) {
+            return;
+        }
+        if (!(control instanceof Button)) {
+            control.setBackground(background);
+        }
+        control.setForeground(foreground);
+        if (control instanceof Composite composite) {
+            for (Control child : composite.getChildren()) {
+                applyThemeToControl(child, background, foreground);
+            }
         }
     }
 
@@ -893,13 +934,16 @@ public class VisualizationPresentation extends AbstractPresentation implements I
     }
 
     private void setColorShortestButton(boolean shortestStatus) {
-        if (shortestButton != null && !shortestButton.isDisposed()) {
-            if (shortestStatus) {
-                shortestButton.setBackground(new Color(200, 200, 200));
-            } else {
-                shortestButton.setBackground(null);
-            }
+        if (shortestButton == null || shortestButton.isDisposed()) {
+            return;
         }
+        if (shortestStatus) {
+            Color selected = ResultSetThemeSettings.instance.backgroundSelected;
+            shortestButton.setBackground(selected != null ? selected : controller.getDefaultBackground());
+        } else {
+            shortestButton.setBackground(controller.getDefaultBackground());
+        }
+        shortestButton.setForeground(controller.getDefaultForeground());
     }
 
     class TurboRowData {

@@ -745,13 +745,11 @@ public class FXGraph implements GraphBase {
 
     @Override
     public void setBackground(Color color) {
-        String rgb =
-                Integer.toHexString(color.getRed())
-                        + Integer.toHexString(color.getGreen())
-                        + Integer.toHexString(color.getBlue());
-        graphView.setStyle("-fx-background-color: #" + rgb + "; -fx-background: #" + rgb);
-        vBox.setStyle("-fx-background-color: #" + rgb + "; -fx-background: #" + rgb);
-        scrollPane.setStyle("-fx-background-color: #" + rgb + "; -fx-background: #" + rgb);
+        String rgb = String.format("%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()); //$NON-NLS-1$
+        String style = "-fx-background-color: #" + rgb + "; -fx-background-color: #" + rgb; //$NON-NLS-1$ //$NON-NLS-2$
+        graphView.setStyle(style);
+        vBox.setStyle(style);
+        scrollPane.setStyle(style);
         canvas.setBackground(color);
     }
 

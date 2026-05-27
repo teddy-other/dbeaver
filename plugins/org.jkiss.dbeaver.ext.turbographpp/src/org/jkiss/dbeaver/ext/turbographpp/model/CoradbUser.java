@@ -2,10 +2,12 @@ package org.jkiss.dbeaver.ext.turbographpp.model;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.ext.generic.model.GenericSchema;
+import org.jkiss.dbeaver.ext.generic.model.GenericView;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCPreparedStatement;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
@@ -16,7 +18,7 @@ import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 public class CoradbUser extends GenericSchema {
 	
 	private final String comment;
-    private List<TurboGraphPPEdge> edges;
+    private List<? extends GenericView> edges;
     private List<? extends TurboGraphPPVertex> nodes;
 
 	public CoradbUser(TurboGraphPPDataSource dataSource, String name, String comment) {
@@ -34,26 +36,24 @@ public class CoradbUser extends GenericSchema {
 	}
 
 	public List<? extends TurboGraphPPVertex> getVertexs(DBRProgressMonitor monitor) throws DBException {
-    	if (nodes == null) {
-    		if (getDataSource().isNeo4j()) {
-    			nodes = (List<TurboGraphPPVertex>) super.getPhysicalTables(monitor);
-    		} else {
-    			nodes = (List<TurboGraphPPVertex>) getPhysicalTables(monitor);	
-    		}
+		if (getDataSource().isNeo4j()) {
+			nodes = (List<TurboGraphPPVertex>) super.getPhysicalTables(monitor);
+		} else {
+			nodes = (List<TurboGraphPPVertex>) loadVertex(monitor);	
+		}
     		
-    	}
-    	return nodes;
+    	return nodes == null ? Collections.emptyList() : nodes;
     }
     
-    public List<?  extends TurboGraphPPEdge> getEdges(DBRProgressMonitor monitor) throws DBException {
+    public List<?  extends GenericView> getEdges(DBRProgressMonitor monitor) throws DBException {
         if (edges == null) {
         	if (getDataSource().isNeo4j()) {
-        		edges = (List<TurboGraphPPEdge>) super.getViews(monitor);
+        		edges = (List<Neo4jEdge>) loadNeo4jEdges(monitor);
         	} else {
         		edges = (List<TurboGraphPPEdge>) loadEdges(monitor);
         	}
         } 
-        return edges;
+        return edges == null ? Collections.emptyList() : edges;
     }
     
     private List<? extends TurboGraphPPVertex> loadVertex(DBRProgressMonitor monitor) throws DBException {
@@ -63,8 +63,10 @@ public class CoradbUser extends GenericSchema {
         
         List<TurboGraphPPVertex> vertexList = new ArrayList<TurboGraphPPVertex>();
         try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
+        	StringBuilder sb = new StringBuilder("select * from db_class where class_type = 'VERTEX'");
+        	sb.append(" AND owner_name = '").append(this.getName()).append("'");
             try (JDBCPreparedStatement dbStat =
-                    session.prepareStatement("select * from db_class where class_type = 'VERTEX'")) {
+                    session.prepareStatement(sb.toString())) {
                 try (JDBCResultSet dbResult = dbStat.executeQuery()) {
                     while (dbResult.next()) {
                         String class_name = JDBCUtils.safeGetString(dbResult, "class_name");
@@ -81,13 +83,15 @@ public class CoradbUser extends GenericSchema {
     
     private List<? extends TurboGraphPPEdge> loadEdges(DBRProgressMonitor monitor) throws DBException {
         if (edges != null) {
-            return edges;
+            return (List<TurboGraphPPEdge>) edges;
         }
         
         List<TurboGraphPPEdge> edgeList = new ArrayList<TurboGraphPPEdge>();
         try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
+        	StringBuilder sb = new StringBuilder("select * from db_class where class_type = 'EDGE'");
+        	sb.append(" AND owner_name = '").append(this.getName()).append("'");
             try (JDBCPreparedStatement dbStat =
-            		session.prepareStatement("select * from db_class where class_type = 'EDGE'")) {
+            		session.prepareStatement(sb.toString())) {
                 try (JDBCResultSet dbResult = dbStat.executeQuery()) {
                     while (dbResult.next()) {
                         String class_name = JDBCUtils.safeGetString(dbResult, "class_name");
@@ -99,6 +103,29 @@ public class CoradbUser extends GenericSchema {
             }
         } catch (SQLException ex) {
         	throw new DBException("Load Edge failed", ex);
+        }
+    }
+    
+    private List<? extends Neo4jEdge> loadNeo4jEdges(DBRProgressMonitor monitor) throws DBException {
+        if (edges != null) {
+            return (List<? extends Neo4jEdge>) edges;
+        }
+        
+        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges")) {
+            try (JDBCPreparedStatement dbStat =
+                    session.prepareStatement("CALL db.relationshipTypes()")) {
+                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
+                    List<Neo4jEdge> edgeList = new ArrayList<Neo4jEdge>();
+                    while (dbResult.next()) {
+                        String edgeType = JDBCUtils.safeGetString(dbResult, "relationshipType");
+                        Neo4jEdge neo4jEdge = new Neo4jEdge(this.getObject(), edgeType, dbResult);
+                        edgeList.add(neo4jEdge);
+                    }
+                    return edgeList;
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DBException("load Neo4j Edge", ex);
         }
     }
 }
