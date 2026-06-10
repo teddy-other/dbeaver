@@ -279,7 +279,10 @@ public class TurboGraphList<V, E> implements Graph<V, E> {
     @Override
     public synchronized FxEdge<E, V> insertEdge(Vertex<V> u, Vertex<V> v, E element)
             throws InvalidVertexException, InvalidEdgeException {
-        //        if (getEdge(u, v) == null) {
+    	if (u == null || v == null || element == null) {
+    		return null;
+    	}
+    	
         DVertex startVertex = validateVertex(u);
         DVertex endVertex = validateVertex(v);
         DEdge edge = new DEdge(startVertex, endVertex, element);
@@ -287,14 +290,15 @@ public class TurboGraphList<V, E> implements Graph<V, E> {
         startVertex.getOutgoingEdges().add(edge);
         endVertex.getIncomingEdges().add(edge);
         return edge;
-        //        } else {
-        //            throw new InvalidEdgeException("Edge from u to v exists.");
-        //        }
     }
 
     @Override
     public synchronized FxEdge<E, V> insertEdge(V uElement, V vElement, E eElement)
             throws InvalidVertexException, InvalidEdgeException {
+    	if (uElement == null || vElement == null || eElement == null) {
+    		return null;
+    	}
+    	
         DVertex startVertex = validateVertex(vertices.get(uElement));
         DVertex endVertex = validateVertex(vertices.get(vElement));
 

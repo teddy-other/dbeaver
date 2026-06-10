@@ -217,7 +217,7 @@ public class CubridDataSource extends GenericDataSource
                 }
             }
         } catch (SQLException e) {
-            throw new DBException("Load privilege failed", e);
+            e.printStackTrace();
         }
     }
 
@@ -261,9 +261,13 @@ public class CubridDataSource extends GenericDataSource
     public void initialize(@NotNull DBRProgressMonitor monitor) throws DBException {
         super.initialize(monitor);
         if (!isEOLVersion()) {
-            loadCharsets(monitor);
-            loadCollations(monitor);
-            loadPrivilege(monitor);
+        	try {
+        		loadCharsets(monitor);
+                loadCollations(monitor);
+                loadPrivilege(monitor);
+			} catch (Exception e) {
+				new DBException("initialize failed", e);
+			}
         } else {
             DBWorkbench.getPlatformUI().showMessageBox(
                 "Connected CUBRID Info",

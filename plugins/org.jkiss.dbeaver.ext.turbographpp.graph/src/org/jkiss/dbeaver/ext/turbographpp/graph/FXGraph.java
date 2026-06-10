@@ -623,6 +623,10 @@ public class FXGraph implements GraphBase {
         Object e =
                 graph.insertEdge(
                         dataModel.getNode(startNodeID), dataModel.getNode(endNodeID), edge);
+        if (e == null) {
+        	return null;
+        }
+        
         dataModel.putEdge(id, types, (FxEdge<CypherEdge, CypherNode>) e);
         return e;
     }
