@@ -27,11 +27,11 @@ import org.jkiss.dbeaver.model.DBPIdentifierCase;
 import org.jkiss.dbeaver.model.DBPKeywordType;
 import org.jkiss.dbeaver.model.sql.SQLStateType;
 
-public class TurboPPSQLDialect extends GenericSQLDialect {
+public class CoraDbDialect extends GenericSQLDialect {
 
-    public static final String TURBOGRAPHPP_DIALECT_ID = "turbographpp";
+    public static final String CORADB_DIALECT_ID = "coradb";
 
-    private static final String[] CYPHER_KEYWORDS =
+    private static final String[] CORADB_KEYWORDS =
             new String[] {
                 "ASC",
                 "AND",
@@ -65,48 +65,50 @@ public class TurboPPSQLDialect extends GenericSQLDialect {
                 "WITH"
             };
 
-    public static final String[] CYPHER_NEO4J_FUNCTION = {
-        "collect", "count", "toInteger", "isEmpty", "shortestPath", "sum", "avg"
-        // "FLOOR",
-        // "LOWER",
-        // "MAX",
-        // "MIN",
-        // "SQRT",
-        // "SUBSTRING",
-        // "TRIM",
-        // "UPPER",
+    public static final String[] CORADB_FUNCTION = {
+    		"NODES",
+    		"RELATIONSHIPS",
+    		"PATH_COMP",
+    		"LIST_COMP",
+    		"FIRST",
+    		"LAST",
+    		"TAIL",
+    		"AT",
+    		"SIZE",
+    		"RANGE",
+    		"REDUCE",
+    		"JSON_INFO",
+    		"JSON_PROPERTIES",
+    		"JSON_GRAPH"
     };
-
+    
     private static final String[] DDL_KEYWORDS =
             new String[] {"CREATE", "DELETE", "REMOVE", "SET", "MERGE"};
 
     private static final String[] QUERY_KEYWORDS =
             new String[] {"MATCH", "OPTIONAL MATCH", "MERGE"};
 
-    private static final String[] DML_KEYWORDS = new String[] {"MATCH", "CREATE", "MERGE"};
-
     private static final String[] EXEC_KEYWORDS =
             new String[] {"CALL", "EXISTS", "COUNT", "COLLECT"};
 
     private static final String[] TABLE_KEYWORDS =
-            new String[] {"MATCH", "OPTIONAL MATCH", "MERGE", "CREATE"};
+            new String[] {"MATCH"};
 
     private static final String[] COLUMN_KEYWORDS =
             new String[] {"WHERE", "RETURN", "AND", "OR", "SET", "REMOVE"};
 
-    private static final String[][] QUOTE_STRINGS = {};
-    //    private static final String[][] QUOTE_STRINGS = {
-    //            {"'", "'"},
-    //            {"\"", "\""}
-    //    };
+    private static final String[][] QUOTE_STRINGS = {
+            {"'", "'"},
+            {"\"", "\""}
+    };
 
-    public TurboPPSQLDialect() {
+    public CoraDbDialect() {
         loadKeyword();
     }
 
     @Override
     public String getDialectId() {
-        return TURBOGRAPHPP_DIALECT_ID;
+        return CORADB_DIALECT_ID;
     }
 
     @NotNull
@@ -126,17 +128,6 @@ public class TurboPPSQLDialect extends GenericSQLDialect {
         return super.getQuotedString(string);
     }
 
-    @NotNull
-    @Override
-    public SQLStateType getSQLStateType() {
-        return SQLStateType.UNKNOWN;
-    }
-
-    @Override
-    public boolean isStandardSQL() {
-        return false;
-    }
-
     @Override
     public String[] getDDLKeywords() {
         return DDL_KEYWORDS;
@@ -152,17 +143,13 @@ public class TurboPPSQLDialect extends GenericSQLDialect {
         return EXEC_KEYWORDS;
     }
 
-    @Override
-    public String[] getDMLKeywords() {
-        return DML_KEYWORDS;
-    }
-
     private void loadKeyword() {
         Set<String> all = new HashSet<>();
-        Collections.addAll(all, CYPHER_KEYWORDS);
-        addFunctions(Arrays.asList(CYPHER_NEO4J_FUNCTION));
+        Collections.addAll(all, CORADB_KEYWORDS);
+        addFunctions(Arrays.asList(CORADB_FUNCTION));
         addTableQueryKeywords(TABLE_KEYWORDS);
         addColumnQueryKeywords(COLUMN_KEYWORDS);
+        
 
         for (String kw : all) {
             addSQLKeyword(kw);
@@ -177,7 +164,7 @@ public class TurboPPSQLDialect extends GenericSQLDialect {
             setKeywordIndent(kw, 1);
         }
 
-        addKeywords(Arrays.asList(CYPHER_NEO4J_FUNCTION), DBPKeywordType.FUNCTION);
+        addKeywords(Arrays.asList(CORADB_FUNCTION), DBPKeywordType.FUNCTION);
     }
 
     @Override

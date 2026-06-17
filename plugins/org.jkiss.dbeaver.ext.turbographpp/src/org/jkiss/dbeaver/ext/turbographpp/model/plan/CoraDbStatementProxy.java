@@ -21,11 +21,11 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class TurboGraphPPStatementProxy {
+public class CoraDbStatementProxy {
 
     protected Statement statement;
 
-    public TurboGraphPPStatementProxy(Statement statement) {
+    public CoraDbStatementProxy(Statement statement) {
         this.statement = statement;
     }
 

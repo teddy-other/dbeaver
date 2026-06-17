@@ -20,9 +20,9 @@ import org.jkiss.code.NotNull;
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.ext.generic.GenericConstants;
 import org.jkiss.dbeaver.ext.generic.GenericDataSourceProvider;
-import org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPDataSource;
-import org.jkiss.dbeaver.ext.turbographpp.model.TurboPPSQLDialect;
-import org.jkiss.dbeaver.ext.turbographpp.model.meta.TurboGraphPPMetaModel;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDataSource;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDialect;
+import org.jkiss.dbeaver.ext.turbographpp.model.meta.CoraDbMetaModel;
 import org.jkiss.dbeaver.model.DBPDataSourceContainer;
 import org.jkiss.dbeaver.model.connection.DBPConnectionConfiguration;
 import org.jkiss.dbeaver.model.connection.DBPDriver;
@@ -32,16 +32,16 @@ import org.jkiss.dbeaver.model.preferences.DBPPropertyDescriptor;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 import org.jkiss.utils.CommonUtils;
 
-public class TurboGraphPPDataSourceProvider extends GenericDataSourceProvider<TurboGraphPPDataSource> {
+public class CoraDbDataSourceProvider extends GenericDataSourceProvider<CoraDbDataSource> {
 
-	public TurboGraphPPDataSourceProvider() {
-        super(TurboGraphPPDataSource.class);
+	public CoraDbDataSourceProvider() {
+        super(CoraDbDataSource.class);
     }
 
     @NotNull
     @Override
-    public TurboGraphPPDataSource openDataSource(DBRProgressMonitor monitor, DBPDataSourceContainer container) throws DBException {
-    	return new TurboGraphPPDataSource(monitor, container, new TurboGraphPPMetaModel(), new TurboPPSQLDialect());
+    public CoraDbDataSource openDataSource(DBRProgressMonitor monitor, DBPDataSourceContainer container) throws DBException {
+    	return new CoraDbDataSource(monitor, container, new CoraDbMetaModel(), new CoraDbDialect());
     }
 
     @Override

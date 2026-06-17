@@ -23,9 +23,9 @@ import org.jkiss.dbeaver.model.exec.jdbc.JDBCDatabaseMetaData;
 import org.jkiss.dbeaver.model.impl.struct.RelationalObjectType;
 import org.jkiss.dbeaver.model.struct.DBSObjectType;
 
-class TurboGraphPPDataSourceInfo extends GenericDataSourceInfo implements DBPDataSourceInfo {
+class CoraDbDataSourceInfo extends GenericDataSourceInfo implements DBPDataSourceInfo {
 
-    public TurboGraphPPDataSourceInfo(DBPDriver driver, JDBCDatabaseMetaData metaData) {
+    public CoraDbDataSourceInfo(DBPDriver driver, JDBCDatabaseMetaData metaData) {
         super(driver, metaData);
     }
 

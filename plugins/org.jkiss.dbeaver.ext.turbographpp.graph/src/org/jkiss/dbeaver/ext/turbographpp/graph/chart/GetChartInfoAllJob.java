@@ -23,7 +23,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPDataSource;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDataSource;
 import org.jkiss.dbeaver.model.DBPDataSource;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.exec.DBCException;
@@ -37,7 +37,7 @@ import org.jkiss.dbeaver.runtime.DBWorkbench;
 
 public class GetChartInfoAllJob extends AbstractJob {
 
-    protected TurboGraphPPDataSource dataSource;
+    protected CoraDbDataSource dataSource;
     protected boolean isNeo4j = false;
 
     protected GraphChart graphChart;
@@ -59,7 +59,7 @@ public class GetChartInfoAllJob extends AbstractJob {
             String property) {
         super(jobName);
         setUser(true);
-        this.dataSource = (TurboGraphPPDataSource) datasource;
+        this.dataSource = (CoraDbDataSource) datasource;
         this.graphChart = chart;
         this.infoLabel = label;
         this.infoProperty = property;

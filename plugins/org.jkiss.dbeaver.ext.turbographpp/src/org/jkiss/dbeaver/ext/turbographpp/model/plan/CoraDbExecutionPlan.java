@@ -20,38 +20,38 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPDataSource;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDataSource;
 import org.jkiss.dbeaver.model.exec.DBCException;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
 import org.jkiss.dbeaver.model.exec.plan.DBCPlanNode;
 import org.jkiss.dbeaver.model.impl.plan.AbstractExecutionPlan;
 import org.jkiss.utils.CommonUtils;
 
-public class TurboGraphPPExecutionPlan extends AbstractExecutionPlan {
+public class CoraDbExecutionPlan extends AbstractExecutionPlan {
 
-    protected TurboGraphPPDataSource dataSource;
+    protected CoraDbDataSource dataSource;
     protected String query;
     protected String plan;
 
-    private List<TurboGraphPPPlanNodePlain> rootNodes = null;
+    private List<CoraDbPlanNodePlain> rootNodes = null;
 
-    public TurboGraphPPExecutionPlan(JDBCSession session, String query) throws DBCException {
-        this.dataSource = (TurboGraphPPDataSource) session.getDataSource();
+    public CoraDbExecutionPlan(JDBCSession session, String query) throws DBCException {
+        this.dataSource = (CoraDbDataSource) session.getDataSource();
         this.query = query;
 
         try {
 
-            TurboGraphPPStatementProxy proxy =
-                    new TurboGraphPPStatementProxy(session.getOriginal().createStatement());
+            CoraDbStatementProxy proxy =
+                    new CoraDbStatementProxy(session.getOriginal().createStatement());
 
             plan = proxy.getQueryplan(query);
 
             String[] plans = plan.split("plan : ");
-            List<TurboGraphPPPlanNodePlain> nodes = new ArrayList<>();
-            TurboGraphPPPlanNodePlain rootNode;
+            List<CoraDbPlanNodePlain> nodes = new ArrayList<>();
+            CoraDbPlanNodePlain rootNode;
             for (int i = 0; i < plans.length; i++) {
                 if (plans[i] != null && !plans[i].equals("")) {
-                    rootNode = new TurboGraphPPPlanNodePlain(null, "plan : ", plans[i]);
+                    rootNode = new CoraDbPlanNodePlain(null, "plan : ", plans[i]);
                     if (CommonUtils.isEmpty(rootNode.getNested())
                             && rootNode.getProperty("message") != null) {
                         throw new DBCException(

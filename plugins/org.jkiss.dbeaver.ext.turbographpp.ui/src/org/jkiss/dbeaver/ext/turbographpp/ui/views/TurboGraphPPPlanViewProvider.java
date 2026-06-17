@@ -20,7 +20,7 @@ import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
-import org.jkiss.dbeaver.ext.turbographpp.model.plan.TurboGraphPPExecutionPlan;
+import org.jkiss.dbeaver.ext.turbographpp.model.plan.CoraDbExecutionPlan;
 import org.jkiss.dbeaver.model.exec.plan.DBCPlan;
 import org.jkiss.dbeaver.model.sql.SQLQuery;
 import org.jkiss.dbeaver.ui.editors.sql.plan.simple.SQLPlanViewProviderSimple;
@@ -36,7 +36,7 @@ public class TurboGraphPPPlanViewProvider extends SQLPlanViewProviderSimple {
 
     @Override
     public void visualizeQueryPlan(Viewer viewer, SQLQuery query, DBCPlan plan) {        
-        query.setText(((TurboGraphPPExecutionPlan) plan).getPlanQueryString());
+        query.setText(((CoraDbExecutionPlan) plan).getPlanQueryString());
         fillPlan(query, plan);
         showPlan(viewer, query, plan);
     }

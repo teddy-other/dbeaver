@@ -37,21 +37,21 @@ import org.jkiss.dbeaver.model.meta.Property;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 import org.jkiss.dbeaver.model.struct.DBSObject;
 
-public class Neo4jEdge extends TurboGraphPPEdge {
+public class Neo4jEdge extends CoraDbEdge {
 
-    private final TurboGraphPPDataSource dataSource;
+    private final CoraDbDataSource dataSource;
     private String edgeType;
-    private List<TurboGraphPPVertexColumn> properties;
+    private List<CoraDbVertexColumn> properties;
     
     public Neo4jEdge(GenericStructContainer container, String tableName, String tableType, JDBCResultSet dbResult) {
 		super(container, tableName, tableType, dbResult);
-		this.dataSource = (TurboGraphPPDataSource) container.getDataSource();
+		this.dataSource = (CoraDbDataSource) container.getDataSource();
 	}
 
     public Neo4jEdge(GenericStructContainer container, String edgeType, JDBCResultSet resultSet) {
         super(container, edgeType, "Edge", resultSet);
         this.edgeType = edgeType;
-        this.dataSource = (TurboGraphPPDataSource) container.getDataSource();
+        this.dataSource = (CoraDbDataSource) container.getDataSource();
     }
 
     public boolean equals(Object obj) {
@@ -91,7 +91,7 @@ public class Neo4jEdge extends TurboGraphPPEdge {
 
     @NotNull
     @Override
-    public TurboGraphPPDataSource getDataSource() {
+    public CoraDbDataSource getDataSource() {
         return dataSource;
     }
 
@@ -103,7 +103,7 @@ public class Neo4jEdge extends TurboGraphPPEdge {
 
     @Nullable
     @Override
-    public List<TurboGraphPPVertexColumn> getAttributes(@NotNull DBRProgressMonitor monitor)
+    public List<CoraDbVertexColumn> getAttributes(@NotNull DBRProgressMonitor monitor)
             throws DBException {
         return getProperties(monitor);
     }
@@ -123,7 +123,7 @@ public class Neo4jEdge extends TurboGraphPPEdge {
         return null;
     }
 
-    private List<TurboGraphPPVertexColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
+    private List<CoraDbVertexColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
         if (this.properties != null) {
             return this.properties;
         }

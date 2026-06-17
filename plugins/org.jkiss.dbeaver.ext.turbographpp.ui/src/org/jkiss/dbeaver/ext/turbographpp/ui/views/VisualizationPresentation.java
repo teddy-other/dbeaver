@@ -739,26 +739,6 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         return labels;
     }
 
-    /**
-     * Returns true when a cell value looks like the new CoraDB / TurboGraph++
-     * graph payload (a Map carrying nodes/edges arrays, or a single
-     * node/edge object).
-     */
-    private static boolean isCoraDBGraphCell(Object cellValue) {
-        if (!(cellValue instanceof Map)) {
-            return false;
-        }
-        Map<?, ?> map = (Map<?, ?>) cellValue;
-        if (map.containsKey("nodes") || map.containsKey("edges")) {
-            return true;
-        }
-        return map.containsKey("id")
-                && (map.containsKey("label")
-                        || map.containsKey("properties")
-                        || map.containsKey("startNodeId")
-                        || map.containsKey("endNodeId"));
-    }
-
     private boolean addNeo4jEdge(
             ResultSetModel model, DBDAttributeBinding attr, ResultSetRow row, String cellString) {
         final String ID_KEY = NODE_EDGE_ID;
@@ -1206,34 +1186,6 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 	        }
         }
 
-        // CoraDB / TurboGraph++ JSON-style: a single column may carry nodes,
-        // edges or a wrapper { "nodes":[...], "edges":[...] }. Nodes are
-        // inserted in one sweep so that edges added in the second sweep can
-        // resolve their endpoints regardless of the cell layout.
-//        for (int i = lastReadRowCount; i < allRows.size(); i++) {
-//            ResultSetRow row = allRows.get(i);
-//            for (NEO4JRowData data : coraDBColData) {
-//                Object cellValue = model.getCellValue(data.attr, row);
-//                if (!(cellValue instanceof Map)) {
-//                    continue;
-//                }
-//                String displayString = getCellString(model, data.attr, row, displayFormat);
-//                addCoraDBNodesFromCell(data.attr, row, displayString, (Map<String, Object>) cellValue);
-//            }
-//        }
-//
-//        for (int i = lastReadRowCount; i < allRows.size(); i++) {
-//            ResultSetRow row = allRows.get(i);
-//            for (NEO4JRowData data : coraDBColData) {
-//                Object cellValue = model.getCellValue(data.attr, row);
-//                if (!(cellValue instanceof Map)) {
-//                    continue;
-//                }
-//                String displayString = getCellString(model, data.attr, row, displayFormat);
-//                addCoraDBEdgesFromCell(data.attr, row, displayString, (Map<String, Object>) cellValue);
-//            }
-//        }
-
         lastReadRowCount = allRows.size();
         
         resultLabel.setText(
@@ -1254,7 +1206,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
             if (cellValue == null) {
                 continue;
             }
-            return isCoraDBGraphCell(cellValue);
+            return true;
         }
         return false;
     }
@@ -1264,7 +1216,6 @@ public class VisualizationPresentation extends AbstractPresentation implements I
      * Nodes carry adj_list (with edge connectivity); edges do not.
      * Two-phase: collect all nodes/edges first, then add to visualGraph.
      */
-    @SuppressWarnings("unchecked")
     private void buildCoraDBGraph(List<ResultSetRow> rows) {
         Gson gson = new Gson();
         Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
@@ -1352,68 +1303,6 @@ public class VisualizationPresentation extends AbstractPresentation implements I
                 }
             }
             addCoraDBEdge(null, edgeRowRef.get(edgeId), "", edgeMap);
-        }
-    }
-
-    private boolean makeCoraDBGraph(ResultSetModel model, List<DBDAttributeBinding> attrs, List<ResultSetRow> rows) {
-    	if (rows == null || rows.isEmpty()) {
-            return false;
-        }
-        for (ResultSetRow row : rows) {
-        	Object cellValue = model.getCellValue(attrs.getFirst(), row);
-        }
-
-    	return false;
-    }
-    
-    
-
-    /**
-     * Two-phase splitter for the new CoraDB / TurboGraph++ payload: nodes only.
-     */
-    @SuppressWarnings("unchecked")
-    private void addCoraDBNodesFromCell(
-            DBDAttributeBinding attr,
-            ResultSetRow row,
-            String cellString,
-            Map<String, Object> map) {
-        Object nodesObj = map.get("nodes");
-        if (nodesObj instanceof List) {
-            for (Object n : (List<Object>) nodesObj) {
-                if (n instanceof Map) {
-                    addCoraDBNode(attr, row, cellString, (Map<String, Object>) n);
-                }
-            }
-            return;
-        }
-        if (map.containsKey("startNodeId") || map.containsKey("endNodeId")) {
-            return; // single edge cell, handled later
-        }
-        if (map.containsKey("id")) {
-            addCoraDBNode(attr, row, cellString, map);
-        }
-    }
-
-    /**
-     * Two-phase splitter for the new CoraDB / TurboGraph++ payload: edges only.
-     */
-    @SuppressWarnings("unchecked")
-    private void addCoraDBEdgesFromCell(
-            DBDAttributeBinding attr,
-            ResultSetRow row,
-            String cellString,
-            Map<String, Object> map) {
-        Object edgesObj = map.get("edges");
-        if (edgesObj instanceof List) {
-            for (Object e : (List<Object>) edgesObj) {
-                if (e instanceof Map) {
-                    addCoraDBEdge(attr, row, cellString, (Map<String, Object>) e);
-                }
-            }
-            return;
-        }
-        if (map.containsKey("startNodeId") || map.containsKey("endNodeId")) {
-            addCoraDBEdge(attr, row, cellString, map);
         }
     }
 

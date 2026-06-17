@@ -30,17 +30,17 @@ import org.jkiss.code.NotNull;
 import org.jkiss.dbeaver.model.impl.plan.AbstractExecutionPlanNode;
 import org.jkiss.dbeaver.model.meta.Property;
 
-public class TurboGraphPPPlanNodePlain extends AbstractExecutionPlanNode {
+public class CoraDbPlanNodePlain extends AbstractExecutionPlanNode {
 
-    private TurboGraphPPPlanNodePlain parent;
+    private CoraDbPlanNodePlain parent;
     private String type;
     private String name;
     private String plan;
     private int blankCount;
     private Map<String, String> nodeProps = new LinkedHashMap<>();
-    private List<TurboGraphPPPlanNodePlain> nested = new ArrayList<>();
+    private List<CoraDbPlanNodePlain> nested = new ArrayList<>();
 
-    public TurboGraphPPPlanNodePlain(TurboGraphPPPlanNodePlain parent, String type, String plan) {
+    public CoraDbPlanNodePlain(CoraDbPlanNodePlain parent, String type, String plan) {
         this.parent = parent;
         this.type = type;
         this.name = "";
@@ -53,8 +53,8 @@ public class TurboGraphPPPlanNodePlain extends AbstractExecutionPlanNode {
         }
     }
 
-    public TurboGraphPPPlanNodePlain(
-            TurboGraphPPPlanNodePlain parent, Map<String, String> attributes) {
+    public CoraDbPlanNodePlain(
+            CoraDbPlanNodePlain parent, Map<String, String> attributes) {
         this.parent = parent;
         this.nodeProps.putAll(attributes);
     }
@@ -142,7 +142,7 @@ public class TurboGraphPPPlanNodePlain extends AbstractExecutionPlanNode {
             nested = new ArrayList<>();
         }
         if (!plan.isEmpty()) {
-            nested.add(new TurboGraphPPPlanNodePlain(this, name, plan));
+            nested.add(new CoraDbPlanNodePlain(this, name, plan));
         }
     }
 
@@ -151,7 +151,7 @@ public class TurboGraphPPPlanNodePlain extends AbstractExecutionPlanNode {
             parent.nested = new ArrayList<>();
         }
         if (!plan.isEmpty()) {
-            this.parent.nested.add(new TurboGraphPPPlanNodePlain(parent, name, plan));
+            this.parent.nested.add(new CoraDbPlanNodePlain(parent, name, plan));
         }
     }
 
@@ -186,12 +186,12 @@ public class TurboGraphPPPlanNodePlain extends AbstractExecutionPlanNode {
     }
 
     @Override
-    public TurboGraphPPPlanNodePlain getParent() {
+    public CoraDbPlanNodePlain getParent() {
         return parent;
     }
 
     @Override
-    public Collection<TurboGraphPPPlanNodePlain> getNested() {
+    public Collection<CoraDbPlanNodePlain> getNested() {
         return nested;
     }
 

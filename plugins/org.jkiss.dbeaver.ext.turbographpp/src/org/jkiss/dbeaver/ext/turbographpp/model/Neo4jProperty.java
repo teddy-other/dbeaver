@@ -23,11 +23,11 @@ import org.jkiss.dbeaver.ext.generic.model.GenericTable;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 import org.jkiss.dbeaver.model.meta.Property;
 
-public class Neo4jProperty extends TurboGraphPPVertexColumn {
+public class Neo4jProperty extends CoraDbVertexColumn {
 
     String edgesPropery;
     
-    public Neo4jProperty(GenericTableBase table, String properyKeys) throws DBException {
+    public Neo4jProperty(CoraDbEdge table, String properyKeys) throws DBException {
         super(table, properyKeys);
         edgesPropery = properyKeys;
     }

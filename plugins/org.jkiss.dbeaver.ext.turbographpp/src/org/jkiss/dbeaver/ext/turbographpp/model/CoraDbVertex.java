@@ -16,12 +16,8 @@
  */
 package org.jkiss.dbeaver.ext.turbographpp.model;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.Log;
@@ -39,32 +35,23 @@ import org.jkiss.dbeaver.model.exec.DBCStatement;
 import org.jkiss.dbeaver.model.exec.DBCStatementType;
 import org.jkiss.dbeaver.model.exec.DBCStatistics;
 import org.jkiss.dbeaver.model.exec.DBExecUtils;
-import org.jkiss.dbeaver.model.exec.jdbc.JDBCPreparedStatement;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
-import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCStatement;
-import org.jkiss.dbeaver.model.impl.jdbc.JDBCUtils;
 import org.jkiss.dbeaver.model.messages.ModelMessages;
 import org.jkiss.dbeaver.model.meta.Property;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 
-public class TurboGraphPPVertex extends GenericTable {
+public class CoraDbVertex extends GenericTable {
 
-    private static final Log log = Log.getLog(TurboGraphPPVertex.class);
-    List<TurboGraphPPVertexColumn> properties = null;
+    private static final Log log = Log.getLog(CoraDbVertex.class);
+    List<CoraDbVertexColumn> properties = null;
     
-    public TurboGraphPPVertex(
+    public CoraDbVertex(
             GenericStructContainer container,
             String tableName,
             String tableType,
             JDBCResultSet dbResult) {
         super(container,tableName,tableType,dbResult);
-    }
-    
-    @Override
-    public List<TurboGraphPPVertexColumn> getAttributes(DBRProgressMonitor monitor)
-            throws DBException {
-        return (List<TurboGraphPPVertexColumn>) super.getAttributes(monitor);
     }
     
     @Override
@@ -99,8 +86,8 @@ public class TurboGraphPPVertex extends GenericTable {
         }
 
         StringBuilder query = new StringBuilder(100);
-        query.append("select ").append(getFullyQualifiedName(DBPEvaluationContext.DML));
-        query.append(" from ").append(getFullyQualifiedName(DBPEvaluationContext.DML));
+        query.append("SELECT JSON_INFO(").append("p").append(")");
+        query.append(" FROM MATCH (p:").append(getFullyQualifiedName(DBPEvaluationContext.DML)).append(")");
 
         String sqlQuery = query.toString();
         statistics.setQueryText(sqlQuery);
@@ -166,40 +153,40 @@ public class TurboGraphPPVertex extends GenericTable {
         return false;
     }
     
-    private List<TurboGraphPPVertexColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
-        if (this.properties != null) {
-            return this.properties;
-        }
-
-        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges Propeties")) {
-            String gql =
-                    "MATCH (n:" + this.getName() +") WITH n LIMIT 200 RETURN DISTINCT keys(n)";
-            try (JDBCPreparedStatement dbStat = session.prepareStatement(gql)) {
-                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
-                    // List<TurboGraphPPEdge> edgeList = new ArrayList<>();
-                    String edgesPropery = null;
-                    Set<Neo4jProperty> setList = new HashSet<>();
-                    properties = null;
-                    while (dbResult.next()) {
-                        edgesPropery = JDBCUtils.safeGetString(dbResult, "keys(n)");
-                        if (edgesPropery != null && !edgesPropery.equals("[]")) {
-                            edgesPropery = edgesPropery.replace(String.valueOf('['), "");
-                            edgesPropery = edgesPropery.replace(String.valueOf(']'), "");
-                            String[] propertiesList = edgesPropery.split(", ");
-                            for (int i = 0; i < propertiesList.length; i++) {
-                                propertiesList[i] = propertiesList[i].replaceAll("\"", "");
-                                setList.add(new Neo4jProperty(this, propertiesList[i]));
-                            }
-                        }
-                    }
-                    properties = new ArrayList<>(setList);
-                    return properties;
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DBException(ex.toString());
-        }
-    }
+//    private List<CoraDbVertexColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
+//        if (this.properties != null) {
+//            return this.properties;
+//        }
+//
+//        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges Propeties")) {
+//            String gql =
+//                    "MATCH (n:" + this.getName() +") WITH n LIMIT 200 RETURN DISTINCT keys(n)";
+//            try (JDBCPreparedStatement dbStat = session.prepareStatement(gql)) {
+//                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
+//                    // List<TurboGraphPPEdge> edgeList = new ArrayList<>();
+//                    String edgesPropery = null;
+//                    Set<Neo4jProperty> setList = new HashSet<>();
+//                    properties = null;
+//                    while (dbResult.next()) {
+//                        edgesPropery = JDBCUtils.safeGetString(dbResult, "keys(n)");
+//                        if (edgesPropery != null && !edgesPropery.equals("[]")) {
+//                            edgesPropery = edgesPropery.replace(String.valueOf('['), "");
+//                            edgesPropery = edgesPropery.replace(String.valueOf(']'), "");
+//                            String[] propertiesList = edgesPropery.split(", ");
+//                            for (int i = 0; i < propertiesList.length; i++) {
+//                                propertiesList[i] = propertiesList[i].replaceAll("\"", "");
+//                                setList.add(new Neo4jProperty(this, propertiesList[i]));
+//                            }
+//                        }
+//                    }
+//                    properties = new ArrayList<>(setList);
+//                    return properties;
+//                }
+//            }
+//        } catch (SQLException ex) {
+//            throw new DBException(ex.toString());
+//        }
+//    }
     
     @Property(viewable = true, order = 1)
     public String getName() {
@@ -221,12 +208,19 @@ public class TurboGraphPPVertex extends GenericTable {
     @Override
     public String getObjectDefinitionText(DBRProgressMonitor monitor, Map<String, Object> options)
             throws DBException {
-        return "-- Node DDL not available" ;
+    	StringBuilder sb = new StringBuilder();
+    	sb.append("");
+        return sb.toString();
     }
     
     @Override
     public String getDDL() {
         return null;
+    }
+    
+    @Override
+    public GenericStructContainer getParentObject() {
+    	return super.getParentObject();
     }
     
 }

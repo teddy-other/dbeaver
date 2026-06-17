@@ -16,11 +16,16 @@
  */
 package org.jkiss.dbeaver.ext.turbographpp.edit;
 
+import java.util.Map;
+
 import org.jkiss.code.NotNull;
+import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.ext.generic.edit.GenericTableManager;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbVertex;
+import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 
-public class TurboGraphPPVertexManager extends GenericTableManager
+public class CoraDbVertexManager extends GenericTableManager
 {
     @Override
     public boolean canCreateObject(@NotNull Object container) {
@@ -37,5 +42,23 @@ public class TurboGraphPPVertexManager extends GenericTableManager
     public boolean canDeleteObject(GenericTableBase object) {
         return false;
     }
+    
+    @Override
+    protected void appendTableModifiers(DBRProgressMonitor monitor, GenericTableBase table,
+    		NestedObjectCommand tableProps, StringBuilder ddl, boolean alter, Map<String, Object> options)
+    		throws DBException {
+    	if (table instanceof CoraDbVertex) {
+    		String target = "CREATE TABLE";
+            String replacement = "CREATE VERTEX TABLE";
+            
+            int startIndex = ddl.indexOf(target);
+
+            if (startIndex != -1) {
+                int endIndex = startIndex + target.length();
+                ddl.replace(startIndex, endIndex, replacement);
+            }
+    	}
+    }
+    
     
 }

@@ -22,7 +22,7 @@ import java.util.Map;
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.ext.generic.model.GenericStructContainer;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableColumn;
-import org.jkiss.dbeaver.ext.generic.model.GenericView;
+import org.jkiss.dbeaver.ext.generic.model.GenericTable;
 import org.jkiss.dbeaver.model.data.DBDDataFilter;
 import org.jkiss.dbeaver.model.data.DBDDataReceiver;
 import org.jkiss.dbeaver.model.exec.DBCException;
@@ -33,9 +33,9 @@ import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
 import org.jkiss.dbeaver.model.meta.Property;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 
-public class TurboGraphPPEdge extends GenericView {
+public class CoraDbEdge extends GenericTable {
 
-    public TurboGraphPPEdge(
+    public CoraDbEdge(
     		GenericStructContainer container,
             String tableName,
             String tableType,
@@ -45,7 +45,7 @@ public class TurboGraphPPEdge extends GenericView {
     
     @Override
     public boolean isView() {
-        return true;
+        return false;
     }
     
     @Override
@@ -96,7 +96,7 @@ public class TurboGraphPPEdge extends GenericView {
     @Override
     public String getObjectDefinitionText(DBRProgressMonitor monitor, Map<String, Object> options)
             throws DBException {
-        return "-- Edge Definition not available";
+        return "";
     }
     
     @Override

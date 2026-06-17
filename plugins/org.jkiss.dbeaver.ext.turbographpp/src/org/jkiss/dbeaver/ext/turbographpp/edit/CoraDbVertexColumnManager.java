@@ -16,24 +16,23 @@
  */
 package org.jkiss.dbeaver.ext.turbographpp.edit;
 
-import org.jkiss.dbeaver.ext.generic.edit.GenericViewManager;
-import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
+import org.jkiss.dbeaver.ext.generic.edit.GenericTableColumnManager;
+import org.jkiss.dbeaver.ext.generic.model.GenericTableColumn;
 
-public class TurboGraphPPEdgeManager extends GenericViewManager 
+public class CoraDbVertexColumnManager extends GenericTableColumnManager
 {
-
     @Override
     public boolean canCreateObject(Object container) {
         return false;
     }
     
     @Override
-    public boolean canDeleteObject(GenericTableBase object) {
+    public boolean canDeleteObject(GenericTableColumn object) {
         return false;
     }
     
     @Override
-    public boolean canEditObject(GenericTableBase object) {
-        return false;
+    public boolean canEditObject(GenericTableColumn object) {
+        return true;
     }
 }

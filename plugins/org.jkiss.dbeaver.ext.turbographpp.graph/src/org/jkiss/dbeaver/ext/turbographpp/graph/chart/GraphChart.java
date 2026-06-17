@@ -68,7 +68,7 @@ import org.jkiss.dbeaver.ext.turbographpp.graph.data.CypherNode;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.GraphDataModel;
 import org.jkiss.dbeaver.ext.turbographpp.graph.graphfx.graph.Vertex;
 import org.jkiss.dbeaver.ext.turbographpp.graph.internal.GraphMessages;
-import org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPDataSource;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDataSource;
 import org.jkiss.dbeaver.model.DBPDataSource;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.exec.DBCException;
@@ -107,7 +107,7 @@ public class GraphChart extends MoveBox {
 
     private static StackedBarChart<Number, String> barChart;
 
-    private TurboGraphPPDataSource dataSource;
+    private CoraDbDataSource dataSource;
 
     private Button buttonGraph;
     private Button buttonAll;
@@ -119,7 +119,7 @@ public class GraphChart extends MoveBox {
     public GraphChart(Control control, FXGraph graph, DBPDataSource dataSource) {
         super(control, GraphMessages.graphbox_title, OVERLAY_WIDTH, OVERLAY_HEIGHT);
         this.graph = graph;
-        this.dataSource = (TurboGraphPPDataSource) dataSource;
+        this.dataSource = (CoraDbDataSource) dataSource;
         Composite itemComposite = new Composite(this.getShell(), SWT.NONE);
         GridData gd = new GridData();
         gd.horizontalAlignment = GridData.CENTER;

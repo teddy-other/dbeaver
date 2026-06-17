@@ -20,7 +20,7 @@
 <plugin>
     <extension point="org.jkiss.dbeaver.dataSourceProvider">
         <datasource
-            class="org.jkiss.dbeaver.ext.turbographpp.TurboGraphPPDataSourceProvider"
+            class="org.jkiss.dbeaver.ext.turbographpp.CoraDbDataSourceProvider"
             description="TurboGraph JDBC Driver"
             icon="icons/turbograph_16.png"
             id="turbographpp"
@@ -30,17 +30,17 @@
             	<folder id="schemas" type="org.jkiss.dbeaver.ext.turbographpp.model.CoradbUser" label="%tree.schemas.node.name"
                         icon="#folder_schema" description="%tree.schemas.node.tip">
                     <items label="%tree.user.node.name" path="coradbUser" property="coradbUsers" icon="#schema">
-	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPVertex" label="%tree.table.node.name" icon="#folder_table" description="%tree.tables.node.name">
+	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.CoraDbVertex" label="%tree.table.node.name" icon="#folder_table" description="%tree.tables.node.name">
 		                  <items label="%tree.table.node.name" path="vertex" property="vertexs" icon="#table">
-		                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPTVertexColumn" label="%tree.column.node.name" icon="#columns" description="%tree.columns.node.tip">
+		                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.CoraDbVertexColumn" label="%tree.column.node.name" icon="#columns" description="%tree.columns.node.tip">
 		                        <items label="%tree.column.node.name" path="nodeproperties" property="attributes" icon="#column">
 		                        </items>
 		                    </folder>
 		                  </items>
 	                    </folder>
-	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPEdge" label="%tree.table.edge.name" icon="#folder_view" description="%tree.table.edge.name">
+	                    <folder type="org.jkiss.dbeaver.ext.turbographpp.model.CoraDbEdge" label="%tree.table.edge.name" icon="#folder_view" description="%tree.table.edge.name">
 	                      <items label="%tree.table.edge.name" path="edge" property="edges" icon="#view">
-	                        <folder type="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPEdgeColumn" label="%tree.column.edge.name" icon="#columns" description="%tree.column.edge.tip">
+	                        <folder type="org.jkiss.dbeaver.ext.turbographpp.model.CoraDbEdgeColumn" label="%tree.column.edge.name" icon="#columns" description="%tree.column.edge.tip">
 	                          <items label="%tree.column.node.name" path="edgeproperties" property="attributes" icon="#column">
 	                          </items>
 	                        </folder>
@@ -64,6 +64,25 @@
                         categories="sql">
                         <file type="jar" path="driver/coradb"/>
                         <parameter name="stored-unquoted-case" value="UPPER"/>
+	                    <property name="altHosts" value=""/>
+	                    <property name="rcTime" value="600"/>
+	                    <property name="loadBalance" value="false"/>
+	                    <property name="connectTimeout" value="30"/>
+	                    <property name="queryTimeout" value="0"/>
+	                    <property name="charset" value="utf-8"/>
+	                    <property name="zeroDateTimeBehavior" value="exception"/>
+	                    <property name="logFile" value="cubrid_jdbc.log"/>
+	                    <property name="logOnException" value="false"/>
+	                    <property name="logSlowQueries" value="false"/>
+	                    <property name="slowQueryThresholdMillis" value="60000"/>
+	                    <property name="useLazyConnection" value="false"/>
+	                    <property name="useSSL" value="false"/>
+	                    <property name="clientCacheSize" value="1"/>
+	                    <property name="usePreparedStmtCache" value="false"/>
+	                    <property name="preparedStmtCacheSize" value="25"/>
+	                    <property name="preparedStmtCacheSqlLimit" value="256"/>
+	                    <property name="hold_cursor" value="true"/>
+	                    <property name="@dbeaver-default-resultset.maxrows.sql" value="true"/>
                     </driver>
             		<driver
                         id="vit_turbograph_jdbc"
@@ -103,6 +122,7 @@
                     <property name="preparedStmtCacheSize" value="25"/>
                     <property name="preparedStmtCacheSqlLimit" value="256"/>
                     <property name="hold_cursor" value="true"/>
+                    <property name="@dbeaver-default-resultset.maxrows.sql" value="true"/>
                 </driver>
                 <driver
                     categories="graph"
@@ -136,7 +156,7 @@
     </extension>
 
     <extension point="org.jkiss.dbeaver.sqlDialect">
-        <dialect id="turbographpp" parent="basic" class="org.jkiss.dbeaver.ext.turbographpp.model.TurboPPSQLDialect" label="TurboGraph++" description="TurboGraph++ dialect." icon="turbograph_16.png">
+        <dialect id="turbographpp" parent="basic" class="org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDialect" label="TurboGraph++" description="TurboGraph++ dialect." icon="turbograph_16.png">
         </dialect>
     </extension>
 
@@ -147,10 +167,10 @@
     </extension>
 
     <extension point="org.jkiss.dbeaver.objectManager">
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPVertexManager"         objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPVertex"/>
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPEdgeManager"          objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPEdge"/>
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPVertexColumnManager"   objectType="org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPVertexColumn"/>
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPEdgeManager"          objectType="org.jkiss.dbeaver.ext.turbographpp.model.Neo4jEdge"/>
-        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.TurboGraphPPVertexColumnManager"   objectType="org.jkiss.dbeaver.ext.turbographpp.model.Neo4jProperty"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.CoraDbVertexManager"         objectType="org.jkiss.dbeaver.ext.turbographpp.model.CoraDbVertex"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.CoraDbEdgeManager"          objectType="org.jkiss.dbeaver.ext.turbographpp.model.CoraDbEdge"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.CoraDbVertexColumnManager"   objectType="org.jkiss.dbeaver.ext.turbographpp.model.CoraDbVertexColumn"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.CoraDbEdgeManager"          objectType="org.jkiss.dbeaver.ext.turbographpp.model.Neo4jEdge"/>
+        <manager class="org.jkiss.dbeaver.ext.turbographpp.edit.CoraDbVertexColumnManager"   objectType="org.jkiss.dbeaver.ext.turbographpp.model.Neo4jProperty"/>
     </extension>
 </plugin>

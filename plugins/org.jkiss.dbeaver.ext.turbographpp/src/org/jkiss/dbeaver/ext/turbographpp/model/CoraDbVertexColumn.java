@@ -21,9 +21,9 @@ import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableColumn;
 import org.jkiss.dbeaver.model.meta.Property;
 
-public class TurboGraphPPVertexColumn extends GenericTableColumn {
+public class CoraDbVertexColumn extends GenericTableColumn {
 
-    public TurboGraphPPVertexColumn(
+    public CoraDbVertexColumn(
     		GenericTableBase table,
             String columnName,
             String typeName,
@@ -39,7 +39,7 @@ public class TurboGraphPPVertexColumn extends GenericTableColumn {
         setScale(scale);
     }
     
-    public TurboGraphPPVertexColumn(
+    public CoraDbVertexColumn(
     		GenericTableBase table,
             String columnName)
             throws DBException {

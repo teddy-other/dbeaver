@@ -21,7 +21,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import org.jkiss.code.NotNull;
-import org.jkiss.dbeaver.ext.turbographpp.model.TurboGraphPPDataSource;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDataSource;
 import org.jkiss.dbeaver.model.DBPDataSource;
 import org.jkiss.dbeaver.model.exec.DBCException;
 import org.jkiss.dbeaver.model.exec.DBCSession;
@@ -29,18 +29,18 @@ import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
 import org.jkiss.dbeaver.model.exec.plan.*;
 import org.jkiss.dbeaver.model.impl.plan.AbstractExecutionPlanSerializer;
 
-public class TurboGraphPPPlanAnalyser extends AbstractExecutionPlanSerializer
+public class CoraDbPlanAnalyser extends AbstractExecutionPlanSerializer
         implements DBCQueryPlanner {
 
-    private TurboGraphPPDataSource dataSource;
+    private CoraDbDataSource dataSource;
 
-    public TurboGraphPPPlanAnalyser(TurboGraphPPDataSource dataSource) {
+    public CoraDbPlanAnalyser(CoraDbDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
-    public TurboGraphPPExecutionPlan explain(JDBCSession session, String query)
+    public CoraDbExecutionPlan explain(JDBCSession session, String query)
             throws DBCException {
-        return new TurboGraphPPExecutionPlan(session, query);
+        return new CoraDbExecutionPlan(session, query);
     }
 
     @Override
