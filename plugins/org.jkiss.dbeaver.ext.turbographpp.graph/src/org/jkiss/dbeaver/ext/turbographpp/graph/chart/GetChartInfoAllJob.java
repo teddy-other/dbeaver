@@ -123,11 +123,10 @@ public class GetChartInfoAllJob extends AbstractJob {
         // Object min = 0, max = 0;
         Object retMin = 0, retMax = 0;
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("MATCH (n:" + infoLabel + ")");
-        queryBuilder.append(" WITH MIN(n." + infoProperty + ") as MINVALUE,");
-        queryBuilder.append(" MAX(n." + infoProperty + ") as MAXVALUE");
-        queryBuilder.append(" RETURN MINVALUE, MAXVALUE");
-
+        queryBuilder.append("SELECT MIN(").append(infoProperty).append("),");
+        queryBuilder.append("MAX(").append(infoProperty).append(")");
+        queryBuilder.append("FROM ").append(infoLabel);
+        
         String query = queryBuilder.toString();
         try (JDBCSession session =
                 DBUtils.openMetaSession(monitor, dataSource, "Get Min, Max Value")) {
@@ -162,17 +161,15 @@ public class GetChartInfoAllJob extends AbstractJob {
         String toOperator;
 
         if (fromVal.indexOf("-") > 0) {
-            fromVal = "date('" + fromVal + "')";
-            toVal = "date('" + toVal + "')";
+            fromVal = "TO_DATE('" + fromVal + "', 'YYYY-MM-DD')";
+            toVal = "TO_DATE('" + toVal + "', 'YYYY-MM-DD')";
         }
 
-        if (!isNeo4j) {
-            if (fromVal.indexOf("-") == 0) {
-                fromVal = String.valueOf("0" + fromVal);
-            }
-            if (toVal.indexOf("-") == 0) {
-                toVal = String.valueOf("0" + toVal);
-            }
+        if (fromVal.indexOf("-") == 0) {
+            fromVal = String.valueOf("0" + fromVal);
+        }
+        if (toVal.indexOf("-") == 0) {
+            toVal = String.valueOf("0" + toVal);
         }
 
         fromOperator = " >= ";
@@ -183,10 +180,10 @@ public class GetChartInfoAllJob extends AbstractJob {
         }
 
         StringBuilder queryBuilder = new StringBuilder();
-        queryBuilder.append("MATCH (n:" + infoLabel + ")");
-        queryBuilder.append(" WHERE n." + infoProperty + fromOperator + fromVal);
-        queryBuilder.append(" AND n." + infoProperty + toOperator + toVal);
-        queryBuilder.append(" RETURN COUNT(*) AS node_count");
+        queryBuilder.append("SELECT COUNT(*) AS node_count ");
+        queryBuilder.append("FROM " + infoLabel + " ");
+        queryBuilder.append("WHERE " + infoProperty + fromOperator + fromVal + " ");
+        queryBuilder.append("AND " + infoProperty + toOperator + toVal);
 
         String query = queryBuilder.toString();
         try (JDBCSession session =

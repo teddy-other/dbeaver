@@ -69,6 +69,8 @@ import org.jkiss.dbeaver.ext.turbographpp.graph.data.GraphDataModel;
 import org.jkiss.dbeaver.ext.turbographpp.graph.graphfx.graph.Vertex;
 import org.jkiss.dbeaver.ext.turbographpp.graph.internal.GraphMessages;
 import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDataSource;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbVertex;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoradbUser;
 import org.jkiss.dbeaver.model.DBPDataSource;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.exec.DBCException;
@@ -467,7 +469,7 @@ public class GraphChart extends MoveBox {
     }
 
     private void updateLabelInSource() {
-        new AbstractJob("Get TurboGraph Info") {
+        new AbstractJob("Get CoraDB Info") {
             {
                 setUser(true);
             }
@@ -475,13 +477,12 @@ public class GraphChart extends MoveBox {
             @Override
             protected IStatus run(DBRProgressMonitor monitor) {
                 try {
-                    List<? extends GenericTableBase> tableList = dataSource.getTables(monitor);
+                    List<? extends CoradbUser> tableList = dataSource.getCoradbUsers(monitor);
                     List<String> labelList = new ArrayList<>();
 
-                    for (GenericTableBase table : tableList) {
-                        if (!table.isView()) {
-                            labelList.add(table.getName());
-                        }
+                    for (CoradbUser table : tableList) {
+                    	Object obj = (CoradbUser)table.getVertexCache().getCachedObjects();
+                    	System.out.println("aaaa");
                     }
 
                     Display.getDefault()

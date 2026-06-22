@@ -1,17 +1,11 @@
 package org.jkiss.dbeaver.ext.turbographpp.model;
 
 import java.sql.SQLException;
-import java.util.Collections;
 import java.util.List;
 
-import org.jkiss.code.NotNull;
 import org.jkiss.dbeaver.DBException;
-import org.jkiss.dbeaver.ext.generic.model.GenericDataSource;
 import org.jkiss.dbeaver.ext.generic.model.GenericSchema;
-import org.jkiss.dbeaver.ext.generic.model.GenericStructContainer;
-import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 import org.jkiss.dbeaver.ext.generic.model.GenericView;
-import org.jkiss.dbeaver.ext.generic.model.TableCache;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCPreparedStatement;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
@@ -42,6 +36,14 @@ public class CoradbUser extends GenericSchema {
 	
 	public String getComment() {
 		return comment;
+	}
+	
+	public CoraDbVertexCache getVertexCache() {
+		return coraDbVertexCache;
+	}
+	
+	public CoraDbEdgeCache getEdgeCache() {
+		return coraDbEdgeCache;
 	}
 	
 	public List<? extends CoraDbVertex> getVertexs(DBRProgressMonitor monitor) throws DBException {
@@ -128,7 +130,7 @@ public class CoradbUser extends GenericSchema {
 //    }
     
     
-    private class CoraDbVertexCache extends JDBCObjectCache<CoradbUser, CoraDbVertex> {
+    public class CoraDbVertexCache extends JDBCObjectCache<CoradbUser, CoraDbVertex> {
 
 		@Override
 		protected JDBCStatement prepareObjectsStatement(JDBCSession session, CoradbUser owner) throws SQLException {
@@ -148,7 +150,7 @@ public class CoradbUser extends GenericSchema {
     	
     }
     
-    private class CoraDbEdgeCache extends JDBCObjectCache<CoradbUser, CoraDbEdge> {
+    public class CoraDbEdgeCache extends JDBCObjectCache<CoradbUser, CoraDbEdge> {
 
 		@Override
 		protected JDBCStatement prepareObjectsStatement(JDBCSession session, CoradbUser owner) throws SQLException {

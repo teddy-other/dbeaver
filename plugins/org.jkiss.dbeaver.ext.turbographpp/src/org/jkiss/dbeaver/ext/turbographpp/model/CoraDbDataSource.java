@@ -62,7 +62,11 @@ public class CoraDbDataSource extends GenericDataSource {
     public boolean isNeo4j() {
         return isNeo4j;
     }
-
+    
+    public CoradbUserCache getUserCache() {
+    	return userCache;
+    }
+    
     @Override
     protected CoraDbDataSourceInfo createDataSourceInfo(DBRProgressMonitor monitor, @NotNull JDBCDatabaseMetaData metaData) {
         return new CoraDbDataSourceInfo(container.getDriver(), metaData);
