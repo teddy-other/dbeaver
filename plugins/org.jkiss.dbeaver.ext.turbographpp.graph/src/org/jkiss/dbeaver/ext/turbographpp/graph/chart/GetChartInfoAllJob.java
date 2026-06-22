@@ -125,7 +125,7 @@ public class GetChartInfoAllJob extends AbstractJob {
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("SELECT MIN(").append(infoProperty).append("),");
         queryBuilder.append("MAX(").append(infoProperty).append(")");
-        queryBuilder.append("FROM ").append(infoLabel);
+        queryBuilder.append(" FROM ").append(infoLabel);
         
         String query = queryBuilder.toString();
         try (JDBCSession session =

@@ -69,7 +69,9 @@ import org.jkiss.dbeaver.ext.turbographpp.graph.data.GraphDataModel;
 import org.jkiss.dbeaver.ext.turbographpp.graph.graphfx.graph.Vertex;
 import org.jkiss.dbeaver.ext.turbographpp.graph.internal.GraphMessages;
 import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbDataSource;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbEdge;
 import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbVertex;
+import org.jkiss.dbeaver.ext.turbographpp.model.CoraDbVertexColumn;
 import org.jkiss.dbeaver.ext.turbographpp.model.CoradbUser;
 import org.jkiss.dbeaver.model.DBPDataSource;
 import org.jkiss.dbeaver.model.DBUtils;
@@ -270,7 +272,8 @@ public class GraphChart extends MoveBox {
             if (data instanceof Integer
                     || data instanceof Long
                     || data instanceof BigDecimal
-                    || data instanceof Date) {
+                    || data instanceof Date
+                    || data instanceof Double) {
                 intProperyList.add(protype);
             }
         }
@@ -477,12 +480,18 @@ public class GraphChart extends MoveBox {
             @Override
             protected IStatus run(DBRProgressMonitor monitor) {
                 try {
-                    List<? extends CoradbUser> tableList = dataSource.getCoradbUsers(monitor);
+                    List<? extends CoradbUser> userList = dataSource.getCoradbUsers(monitor);
                     List<String> labelList = new ArrayList<>();
 
-                    for (CoradbUser table : tableList) {
-                    	Object obj = (CoradbUser)table.getVertexCache().getCachedObjects();
-                    	System.out.println("aaaa");
+                    for (CoradbUser user : userList) {
+                        List<? extends Object> objList = user.getVertexs(monitor);
+
+                        for(Object o: objList) {
+                            if (o instanceof CoraDbVertex) {
+                                CoraDbVertex v = (CoraDbVertex) o;
+                                labelList.add(v.getName());
+                            }
+                        }
                     }
 
                     Display.getDefault()
@@ -578,13 +587,23 @@ public class GraphChart extends MoveBox {
             @Override
             protected IStatus run(DBRProgressMonitor monitor) {
                 try {
-                    GenericTable table = (GenericTable) dataSource.getTable(monitor, label);
-                    List<? extends GenericTableColumn> listProperties =
-                            table.getAttributes(monitor);
+                    List<? extends CoradbUser> userList = dataSource.getCoradbUsers(monitor);
+                    List<? extends GenericTableColumn> columnList = null;
+                    for (CoradbUser user : userList) {
+                        List<? extends Object> objList = user.getVertexs(monitor);
+
+                        for(Object o: objList) {
+                            if (o instanceof CoraDbVertex) {
+                                CoraDbVertex v = (CoraDbVertex) o;
+                                if (v.getName().equals(label)) {
+                                    columnList = v.getAttributes(monitor);
+                                }
+                            }
+                        }
+                    }
 
                     List<String> list = new ArrayList<>();
-
-                    for (GenericTableColumn column : listProperties) {
+                    for (GenericTableColumn column : columnList) {
                         for (int i = 0; i < TURBOGRAPH_SUPPORT_MIN_MAX_TYPE_ID.length; i++) {
                             if (TURBOGRAPH_SUPPORT_MIN_MAX_TYPE_ID[i] == column.getTypeID()) {
                                 list.add(column.getName());

@@ -43,7 +43,7 @@
                 id="visualview"
                 label="%presentation.visual.label"
                 description="%presentation.visual.description"
-                icon="icons/picture.png"
+                icon="icons/picture.svg"
                 class="org.jkiss.dbeaver.ext.turbographpp.ui.views.VisualizationPresentation"
                 type="columns"
                 supportsRecordMode="false"
