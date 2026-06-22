@@ -130,8 +130,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <_exportcontents>com.sun.javafx.*</_exportcontents>
-                                <Export-Package>com.sun.javafx.*;version="${javafx.version}"</Export-Package>
+                                <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.win;bundle-version="[${javafx.version},24)",openjfx.graphics.win;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
@@ -145,8 +144,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <_exportcontents>com.sun.javafx.*</_exportcontents>
-                                <Export-Package>com.sun.javafx.*;version="${javafx.version}"</Export-Package>
+                                <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.linux;bundle-version="[${javafx.version},24)",openjfx.graphics.linux;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
@@ -160,8 +158,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <_exportcontents>com.sun.javafx.*</_exportcontents>
-                                <Export-Package>com.sun.javafx.*;version="${javafx.version}"</Export-Package>
+                                <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.mac;bundle-version="[${javafx.version},24)",openjfx.graphics.mac;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
@@ -175,8 +172,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <_exportcontents>com.sun.javafx.*</_exportcontents>
-                                <Export-Package>com.sun.javafx.*;version="${javafx.version}"</Export-Package>
+                                <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.mac-aarch64;bundle-version="[${javafx.version},24)",openjfx.graphics.mac-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
@@ -190,13 +186,16 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <_exportcontents>com.sun.javafx.*</_exportcontents>
-                                <Export-Package>com.sun.javafx.*;version="${javafx.version}"</Export-Package>
+                                <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.linux-aarch64;bundle-version="[${javafx.version},24)",openjfx.graphics.linux-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
 
                         <!-- javafx-graphics -->
+                        <!-- Eclipse-BuddyPolicy: dependent — graphics searches classloaders of bundles
+                             that declare Require-Bundle: openjfx.graphics.win (i.e. openjfx.controls.win).
+                             This is resolved at wiring time (no runtime registration step), so there is
+                             no timing race with Class.forName("Utils") during Control.<clinit>. -->
                         <artifact>
                             <id>org.openjfx:javafx-graphics:jar:win:${javafx.version}</id>
                             <transitive>false</transitive>
@@ -207,9 +206,8 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <DynamicImport-Package>com.sun.javafx.*</DynamicImport-Package>
-                                <Import-Package>com.sun.javafx.scene.control.skin,com.sun.javafx.scene.control.skin.modena</Import-Package>
-                                <Require-Bundle>openjfx.base.win;bundle-version="[${javafx.version},24)",openjfx.controls.win;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
+                                <Require-Bundle>openjfx.base.win;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -222,9 +220,8 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <DynamicImport-Package>com.sun.javafx.*</DynamicImport-Package>
-                                <Import-Package>com.sun.javafx.scene.control.skin,com.sun.javafx.scene.control.skin.modena</Import-Package>
-                                <Require-Bundle>openjfx.base.linux;bundle-version="[${javafx.version},24)",openjfx.controls.linux;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
+                                <Require-Bundle>openjfx.base.linux;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -237,9 +234,8 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <DynamicImport-Package>com.sun.javafx.*</DynamicImport-Package>
-                                <Import-Package>com.sun.javafx.scene.control.skin,com.sun.javafx.scene.control.skin.modena</Import-Package>
-                                <Require-Bundle>openjfx.base.mac;bundle-version="[${javafx.version},24)",openjfx.controls.mac;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
+                                <Require-Bundle>openjfx.base.mac;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -252,9 +248,8 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <DynamicImport-Package>com.sun.javafx.*</DynamicImport-Package>
-                                <Import-Package>com.sun.javafx.scene.control.skin,com.sun.javafx.scene.control.skin.modena</Import-Package>
-                                <Require-Bundle>openjfx.base.mac-aarch64;bundle-version="[${javafx.version},24)",openjfx.controls.mac-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
+                                <Require-Bundle>openjfx.base.mac-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -267,9 +262,8 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
-                                <DynamicImport-Package>com.sun.javafx.*</DynamicImport-Package>
-                                <Import-Package>com.sun.javafx.scene.control.skin,com.sun.javafx.scene.control.skin.modena</Import-Package>
-                                <Require-Bundle>openjfx.base.linux-aarch64;bundle-version="[${javafx.version},24)",openjfx.controls.linux-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
+                                <Require-Bundle>openjfx.base.linux-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
                             </instructions>
                         </artifact>
 
