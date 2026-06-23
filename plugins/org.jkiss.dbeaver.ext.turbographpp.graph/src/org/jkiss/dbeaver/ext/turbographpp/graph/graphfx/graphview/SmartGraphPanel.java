@@ -1339,6 +1339,17 @@ public class SmartGraphPanel<V, E> extends Pane {
         edge.setStyle(SmartStyleProxy.HIGHLIGHT_EDGE);
     }
 
+    @SuppressWarnings("rawtypes")
+    public void updateEdgeTheme(String edgeStyle, String labelStyle) {
+        edgeNodes.values().forEach(edge -> {
+            edge.setStyle(edgeStyle);
+            SmartLabel label = edge.getAttachedLabel();
+            if (label != null) {
+                label.setStyle(labelStyle);
+            }
+        });
+    }
+
     public void setHighlight(Vertex<V> vertex) {
         highlighNode = vertex;
         doHighlight(highlighNode, true);

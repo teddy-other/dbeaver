@@ -41,6 +41,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.layout.VBox;
+import java.net.URL;
+import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -72,8 +74,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.jkiss.dbeaver.ext.turbographpp.graph.chart.GraphChart;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.CypherEdge;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.CypherNode;
@@ -123,9 +125,11 @@ public class FXGraph implements GraphBase {
     private Control control;
     private Scene scene;
 
-    private TabFolder tabFolder;
-    private TabItem graphTab;
-    private TabItem browserTab;
+    private CTabFolder tabFolder;
+    private Composite graphComposite;
+    private Composite browserComposite;
+    private CTabItem graphTab;
+    private CTabItem browserTab;
 
     private MiniMap miniMap;
 
@@ -177,6 +181,8 @@ public class FXGraph implements GraphBase {
 
     private DBPDataSource parentDataSource;
 
+    private Color lastBackgroundColor = null;
+
     private double lastRadius = 35;
 
     private LayoutStyle lastLayoutstyle = LayoutStyle.SPRING;
@@ -191,27 +197,28 @@ public class FXGraph implements GraphBase {
         // this default option are true then fx thread issue when changed Presentation.
         Platform.setImplicitExit(false);
 
-        tabFolder = new TabFolder(parent, SWT.NONE);
+        tabFolder = new CTabFolder(parent, SWT.NONE);
         tabFolder.setEnabled(true);
         GridData gd = new GridData(SWT.FILL, SWT.FILL);
         tabFolder.setLayoutData(gd);
 
-        graphTab = new TabItem(tabFolder, SWT.NULL);
+        graphTab = new CTabItem(tabFolder, SWT.NONE);
         graphTab.setText(GraphMessages.fxgraph_graph_tab_title);
         graphTab.setData(dataSource);
 
-        browserTab = new TabItem(tabFolder, SWT.NULL);
+        browserTab = new CTabItem(tabFolder, SWT.NONE);
         browserTab.setText(GraphMessages.fxgraph_browser_tab_title);
 
-        Composite graphComposite = new Composite(tabFolder, SWT.NONE);
+        graphComposite = new Composite(tabFolder, SWT.NONE);
         graphComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
         graphComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         graphTab.setControl(graphComposite);
 
-        Composite browserComposite = new Composite(tabFolder, SWT.NONE);
+        browserComposite = new Composite(tabFolder, SWT.NONE);
         browserComposite.setLayout(new FillLayout(SWT.HORIZONTAL));
         browserComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
         browserTab.setControl(browserComposite);
+        tabFolder.setSelection(0);
 
         canvas = new FXCanvas(graphComposite, SWT.NONE);
 
@@ -749,12 +756,47 @@ public class FXGraph implements GraphBase {
 
     @Override
     public void setBackground(Color color) {
+        this.lastBackgroundColor = color;
+        double luminance = (0.299 * color.getRed() + 0.587 * color.getGreen() + 0.114 * color.getBlue()) / 255.0;
+        String edgeHex = luminance < 0.5 ? "cccccc" : "333333"; //$NON-NLS-1$ //$NON-NLS-2$
+
         String rgb = String.format("%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue()); //$NON-NLS-1$
-        String style = "-fx-background-color: #" + rgb + "; -fx-background-color: #" + rgb; //$NON-NLS-1$ //$NON-NLS-2$
-        graphView.setStyle(style);
-        vBox.setStyle(style);
-        scrollPane.setStyle(style);
+        String bgStyle = "-fx-background-color: #" + rgb; //$NON-NLS-1$
+        String edgeStyle = SmartStyleProxy.getEdgeStyleForColor(edgeHex);
+        String labelStyle = SmartStyleProxy.getEdgeLabelStyleForColor(edgeHex);
+
         canvas.setBackground(color);
+        tabFolder.setBackground(color);
+        tabFolder.setSelectionBackground(color);
+        tabFolder.setBackgroundMode(SWT.INHERIT_FORCE);
+        graphComposite.setBackground(color);
+        browserComposite.setBackground(color);
+
+        if (chartBox != null) {
+            chartBox.setBackGround(color);
+        }
+
+        final boolean isDark = luminance < 0.5;
+        Platform.runLater(() -> {
+            String cssPath = "/css/" + (isDark ? "dark.css" : "light.css"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+            try {
+                URL cssUrl = FXGraph.class.getResource(cssPath);
+                if (cssUrl != null) {
+                    URL fileUrl = FileLocator.toFileURL(cssUrl);
+                    scene.getStylesheets().setAll(fileUrl.toExternalForm());
+                }
+            } catch (Exception ignored) {}
+
+            scene.setFill(javafx.scene.paint.Color.web("#" + rgb)); //$NON-NLS-1$
+            graphView.setStyle(bgStyle);
+            vBox.setStyle(bgStyle);
+            scrollPane.setStyle(bgStyle);
+            graphView.updateEdgeTheme(edgeStyle, labelStyle);
+
+            Platform.runLater(() -> {
+                scrollPane.lookupAll(".viewport").forEach(n -> n.setStyle(bgStyle)); //$NON-NLS-1$
+            });
+        });
     }
 
     @Override
@@ -1361,6 +1403,9 @@ public class FXGraph implements GraphBase {
     public void designEditorShow() {
         if (designBox == null) {
             designBox = new DesignBox(canvas, this);
+            if (lastBackgroundColor != null) {
+                designBox.setBackground(lastBackgroundColor);
+            }
         }
         if (designBox.isShowing()) {
             designBox.remove();
@@ -1374,6 +1419,9 @@ public class FXGraph implements GraphBase {
     public void chartShow() {
         if (chartBox == null) {
             chartBox = new GraphChart(canvas, this, parentDataSource);
+            if (lastBackgroundColor != null) {
+                chartBox.setBackGround(lastBackgroundColor);
+            }
         }
 
         if (chartBox.isShowing()) {
@@ -1388,6 +1436,9 @@ public class FXGraph implements GraphBase {
     public void valueShow() {
         if (valBox == null) {
             valBox = new ValueBox(canvas);
+            if (lastBackgroundColor != null) {
+                valBox.setBackground(lastBackgroundColor);
+            }
         }
 
         if (valBox.isShowing()) {

@@ -43,9 +43,9 @@ public class SmartStyleProxy implements SmartStylableNode {
             "-fx-stroke-width: 9;" + "    -fx-stroke: #FF0000;" + "    -fx-stroke-type: inside;";
 
     public static final String DEFAULT_EDGE_LINE_WEIGHT = "3";
-    public static final String DEFAULT_EDGE_LINE_COLOR = "000000";
+    public static final String DEFAULT_EDGE_LINE_COLOR = "999999";
     public static final String DEFAULT_EDGE_LINE_STYLE = "4 4 4 4";
-    public static final String DEFAULT_EDGE_LINE_STRENGTH = "0.2";
+    public static final String DEFAULT_EDGE_LINE_STRENGTH = "0.7";
 
     public static final String DEFAULT_EDGE =
             "-fx-stroke-width: "
@@ -122,5 +122,19 @@ public class SmartStyleProxy implements SmartStylableNode {
                 + " -fx-opacity: "
                 + weight
                 + ";";
+    }
+
+    public static String getEdgeStyleForColor(String hexColor) {
+        return "-fx-stroke-width: " + DEFAULT_EDGE_LINE_WEIGHT
+                + "; -fx-stroke: #" + hexColor
+                + "; -fx-stroke-dash-array: " + DEFAULT_EDGE_LINE_STYLE
+                + "; -fx-fill: transparent"
+                + "; -fx-stroke-line-cap: round"
+                + "; -fx-opacity: " + DEFAULT_EDGE_LINE_STRENGTH + ";";
+    }
+
+    public static String getEdgeLabelStyleForColor(String hexColor) {
+        return "-fx-font: normal " + DEFAULT_EDGE_LABEL_SIZE + "pt \"sans-serif\";"
+                + " -fx-fill: #" + hexColor + ";";
     }
 }

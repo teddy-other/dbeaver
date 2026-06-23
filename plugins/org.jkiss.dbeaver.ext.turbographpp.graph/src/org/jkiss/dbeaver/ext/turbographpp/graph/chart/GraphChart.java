@@ -40,6 +40,7 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.StackedBarChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.chart.XYChart.Series;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -57,8 +58,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
+import org.eclipse.swt.graphics.Color;
 import org.jkiss.dbeaver.ext.generic.model.GenericTable;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 import org.jkiss.dbeaver.ext.generic.model.GenericTableColumn;
@@ -90,8 +92,10 @@ public class GraphChart extends MoveBox {
 
     private final FXGraph graph;
 
-    private final TabFolder tabFolder;
-    private final TabItem tab1;
+    private final CTabFolder tabFolder;
+    private final CTabItem tab1;
+
+    private Color lastBarChartColor = null;
 
     private Combo nodeLableList;
     private Combo propertyList;
@@ -163,14 +167,14 @@ public class GraphChart extends MoveBox {
         buttonAll.setSelection(false);
         buttonGraph.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-        tabFolder = new TabFolder(this.getShell(), SWT.BORDER);
+        tabFolder = new CTabFolder(this.getShell(), SWT.BORDER);
         tabFolder.setEnabled(true);
         gd = new GridData();
         gd.horizontalAlignment = SWT.FILL;
         gd.horizontalSpan = 3;
         tabFolder.setLayoutData(gd);
 
-        tab1 = new TabItem(tabFolder, SWT.NULL);
+        tab1 = new CTabItem(tabFolder, SWT.NONE);
         tab1.setText("Chart");
 
         Composite tab1Composite = new Composite(tabFolder, SWT.NONE);
@@ -183,6 +187,7 @@ public class GraphChart extends MoveBox {
         tab1Composite.setLayout(layout1);
         tab1Composite.setLayoutData(gd);
         tab1.setControl(tab1Composite);
+        tabFolder.setSelection(0);
         create2dChartCanva(tab1Composite);
 
         addListener();
@@ -251,8 +256,6 @@ public class GraphChart extends MoveBox {
     }
 
     private void setSelectNode(Object item) {
-        int idx = -1;
-
         nodeSelectItem = item;
         CypherNode node = (CypherNode) item;
 
@@ -290,6 +293,7 @@ public class GraphChart extends MoveBox {
 
     public void open(int positionX, int positionY) {
         updateNodeCombo();
+        UILock();
         show();
         setOverlaySize(positionX, positionY, tabFolder.getSize().x, tabFolder.getSize().y);
     }
@@ -417,6 +421,7 @@ public class GraphChart extends MoveBox {
         chartPane.getChildren().add(barChart);
 
         setLabelProperty(xAxis, yAxis);
+        applyChartTheme();
     }
 
     public void dataAnalyze(String label, String property) {
@@ -469,6 +474,48 @@ public class GraphChart extends MoveBox {
                         propertyList.setEnabled(true);
                     }
                 });
+    }
+    
+    public void setBackGround(Color color) {
+        this.lastBarChartColor = color;
+        super.setBackground(color);
+        tabFolder.setSelectionBackground(color);
+
+        Platform.runLater(() -> applyChartTheme());
+    }
+
+    private void applyChartTheme() {
+        if (lastBarChartColor == null || chartPane == null) {
+            return;
+        }
+        double luminance = (0.299 * lastBarChartColor.getRed()
+                + 0.587 * lastBarChartColor.getGreen()
+                + 0.114 * lastBarChartColor.getBlue()) / 255.0;
+        boolean isDark = luminance < 0.5;
+        String rgb = String.format("%02x%02x%02x",
+                lastBarChartColor.getRed(), lastBarChartColor.getGreen(), lastBarChartColor.getBlue());
+        String bgStyle = "-fx-background-color: #" + rgb;
+        String plotBg = isDark ? "#3D3D3D" : "#FFFFFF";
+        String textFill = isDark ? "#CCCCCC" : "#333333";
+
+        chartPane.setStyle(bgStyle);
+        if (barChart != null) {
+            barChart.setStyle(bgStyle);
+        }
+        chartPane.applyCss();
+        chartPane.layout();
+        chartPane.lookupAll(".chart-plot-background").forEach(n ->
+                n.setStyle("-fx-background-color: " + plotBg + ";"));
+        chartPane.lookupAll(".chart-title").forEach(n ->
+                n.setStyle("-fx-text-fill: " + textFill + ";"));
+        chartPane.lookupAll(".axis-label").forEach(n ->
+                n.setStyle("-fx-text-fill: " + textFill + ";"));
+        chartPane.lookupAll(".axis").forEach(n ->
+                n.setStyle("-fx-tick-label-fill: " + textFill + ";"));
+        chartPane.lookupAll(".chart-legend").forEach(n ->
+                n.setStyle("-fx-background-color: #" + rgb + ";"));
+        chartPane.lookupAll(".chart-legend-item").forEach(n ->
+                n.setStyle("-fx-text-fill: " + textFill + ";"));
     }
 
     private void updateLabelInSource() {
@@ -597,6 +644,7 @@ public class GraphChart extends MoveBox {
                                 CoraDbVertex v = (CoraDbVertex) o;
                                 if (v.getName().equals(label)) {
                                     columnList = v.getAttributes(monitor);
+                                    break;
                                 }
                             }
                         }

@@ -35,6 +35,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -299,7 +300,26 @@ public class MoveBox {
     }
 
     public void setBackground(Color background) {
-        overlayShell.setBackground(background);
+        applyBackgroundRecursive(overlayShell, background);
+    }
+
+    private static void applyBackgroundRecursive(Composite composite, Color background) {
+        if (composite == null || composite.isDisposed()) {
+            return;
+        }
+        composite.setBackground(background);
+        composite.setBackgroundMode(SWT.INHERIT_FORCE);
+        if (composite instanceof CTabFolder) {
+            ((CTabFolder) composite).setSelectionBackground(background);
+        }
+        for (Control child : composite.getChildren()) {
+            if (!(child instanceof Button)) {
+                child.setBackground(background);
+            }
+            if (child instanceof Composite) {
+                applyBackgroundRecursive((Composite) child, background);
+            }
+        }
     }
 
     public Color getBackground() {

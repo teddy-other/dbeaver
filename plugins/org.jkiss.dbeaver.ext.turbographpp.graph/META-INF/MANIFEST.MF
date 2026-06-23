@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.jkiss.dbeaver.ext.turbographpp.graph;singleton:=true
 Bundle-Version: 1.0.1.qualifier
 Bundle-Release-Date: 20220320
 Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
  org.jkiss.dbeaver.ui,
  org.jkiss.dbeaver.ext.generic,
  org.jkiss.dbeaver.ext.turbographpp.javafx,
@@ -14,6 +15,7 @@ Require-Bundle: org.eclipse.ui,
  openjfx.base.win,
  openjfx.controls.win,
  openjfx.graphics.win
+Import-Package: org.eclipse.swt.custom
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: org.jkiss.dbeaver.ext.turbographpp.graph.GraphUIActivator
 Bundle-RequiredExecutionEnvironment: JavaSE-21

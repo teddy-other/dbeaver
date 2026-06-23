@@ -1,0 +1,93 @@
+/* ScrollPane 전체 배경 및 테두리 수정 */
+.scroll-pane {
+    -fx-background-color: #F9F9F9; /* 주위 배경색 (연한 아이보리/그레이 톤) */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: #E0E0E0; /* 스크롤팬 주변 테두리 선 */
+    -fx-border-width: 1px;
+}
+
+/* ScrollPane 내부의 뷰포트(콘텐츠가 보이는 영역) 배경 */
+.scroll-pane > .viewport {
+    -fx-background-color: #FFFFFF; /* 본문 콘텐츠 배경은 깔끔한 화이트 */
+}
+
+/* 스크롤바 전체 배경 (트랙) */
+.scroll-pane .scroll-bar:vertical,
+.scroll-pane .scroll-bar:horizontal {
+    -fx-background-color: #F0F0F0; /* 스크롤바가 지나가는 길의 밝은 회색 */
+}
+
+/* 스크롤바의 움직이는 바 (Thumb) */
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: #CDCDCD; /* 평소 스크롤바 바 색상 */
+    -fx-background-radius: 5em;    /* 둥근 스크롤바 스타일 */
+    -fx-background-insets: 2px;    /* 트랙 안에서 살짝 여백을 주어 깔끔하게 표현 */
+}
+
+/* 스크롤바 마우스 오버(Hover) 시 색상 변화 */
+.scroll-pane .scroll-bar .thumb:hover {
+    -fx-background-color: #A6A6A6; /* 마우스를 올리면 조금 더 어두워짐 */
+}
+
+/* 스크롤바 클릭(Pressed) 시 색상 변화 */
+.scroll-pane .scroll-bar .thumb:pressed {
+    -fx-background-color: #7B7B7B; /* 클릭 시 확실한 피드백을 위해 어둡게 */
+}
+
+/* 상하좌우 화살표 버튼 숨기기 */
+/* (모던한 화이트 테마에서도 화살표를 없애고 바(Thumb)만 남기는 것이 깔끔합니다) */
+.scroll-pane .scroll-bar .increment-button,
+.scroll-pane .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 0 0;
+}
+
+.scroll-pane .scroll-bar .increment-arrow,
+.scroll-pane .scroll-bar .decrement-arrow {
+    -fx-shape: " ";
+    -fx-padding: 0;
+}
+
+/* 가로/세로 스크롤바가 만나는 우측 하단 모서리(Corner) 공백 처리 */
+.scroll-pane .corner {
+    -fx-background-color: #F0F0F0;
+}
+
+/* Chart light theme */
+.chart {
+    -fx-background-color: #F9F9F9;
+    -fx-padding: 5;
+}
+
+.chart-plot-background {
+    -fx-background-color: #FFFFFF;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #E0E0E0;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #E0E0E0;
+}
+
+.chart-title {
+    -fx-text-fill: #333333;
+}
+
+.axis {
+    -fx-tick-label-fill: #333333;
+}
+
+.axis-label {
+    -fx-text-fill: #333333;
+}
+
+.chart-legend {
+    -fx-background-color: #F9F9F9;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #333333;
+}
