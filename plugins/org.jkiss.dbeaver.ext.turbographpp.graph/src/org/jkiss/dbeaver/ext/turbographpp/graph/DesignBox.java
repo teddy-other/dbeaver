@@ -31,8 +31,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.CypherEdge;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.CypherNode;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.DisplayType;
@@ -46,9 +46,9 @@ public class DesignBox extends MoveBox {
 
     private final FXGraph graph;
 
-    private final TabFolder tabFolder;
-    private final TabItem nodeTab;
-    private final TabItem edgeTab;
+    private final CTabFolder tabFolder;
+    private final CTabItem nodeTab;
+    private final CTabItem edgeTab;
 
     // Node widget
     private Combo nodeLableList;
@@ -80,17 +80,17 @@ public class DesignBox extends MoveBox {
         super(control, GraphMessages.designbox_title, OVERLAY_WIDTH, OVERLAY_NODE_HEIGHT);
         this.graph = graph;
 
-        tabFolder = new TabFolder(this.getShell(), SWT.BORDER);
+        tabFolder = new CTabFolder(this.getShell(), SWT.BORDER);
         tabFolder.setEnabled(true);
         GridData gd = new GridData();
         gd.horizontalAlignment = SWT.FILL;
         gd.horizontalSpan = 3;
         tabFolder.setLayoutData(gd);
 
-        nodeTab = new TabItem(tabFolder, SWT.NULL);
+        nodeTab = new CTabItem(tabFolder, SWT.NULL);
         nodeTab.setText(GraphMessages.designbox_table_node_tab_title);
 
-        edgeTab = new TabItem(tabFolder, SWT.NULL);
+        edgeTab = new CTabItem(tabFolder, SWT.NULL);
         edgeTab.setText(GraphMessages.designbox_table_edge_tab_title);
 
         Composite nodeComposite = new Composite(tabFolder, SWT.NONE);
@@ -115,6 +115,7 @@ public class DesignBox extends MoveBox {
         edgeComposite.setLayout(layout2);
         edgeComposite.setLayoutData(gd);
         edgeTab.setControl(edgeComposite);
+        tabFolder.setSelection(0);
 
         createEdgeWidget(edgeComposite);
     }

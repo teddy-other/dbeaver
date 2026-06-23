@@ -1129,8 +1129,6 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         if (nodeRowData.isEmpty() && edgeRowData.isEmpty()) {
             buildCoraDBGraph(allRows);
         } else {
-        
-
 	        for (int i = 0; i < allRows.size(); i++) { // Add Node
 	            ResultSetRow row = allRows.get(i);
 	            for (Object obj : nodeRowData) {
@@ -1275,7 +1273,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
                         edgeRowRef.put(id, row);
                     }
                 } catch (Exception e) {
-                    // skip malformed JSON rows
+
                 }
             }
         }
@@ -1290,7 +1288,9 @@ public class VisualizationPresentation extends AbstractPresentation implements I
             String edgeId = connEntry.getKey();
             String[] conn = connEntry.getValue();
             Map<String, Object> edgeData = edgesByID.get(edgeId);
-
+            if (edgeData == null) {
+                continue;
+            }
             Map<String, Object> edgeMap = new LinkedHashMap<>();
             edgeMap.put("id", edgeId);
             edgeMap.put("startNodeId", conn[0]);

@@ -40,9 +40,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.TabFolder;
-import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabItem;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.CypherEdge;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.CypherNode;
 import org.jkiss.dbeaver.ext.turbographpp.graph.data.DataRowID;
@@ -50,8 +50,8 @@ import org.jkiss.dbeaver.ext.turbographpp.graph.internal.GraphMessages;
 
 public class ValueBox extends MoveBox {
 
-    private final TabFolder tabFolder;
-    private final TabItem valueTab;
+    private final CTabFolder tabFolder;
+    private final CTabItem valueTab;
 
     private TableViewer tableViewer;
     private TableColumnLayout tableColumnLayout;
@@ -65,10 +65,10 @@ public class ValueBox extends MoveBox {
 
     public ValueBox(Control control) {
         super(control, GraphMessages.valbox_title, OVERLAY_WIDTH, OVERLAY_HEIGHT);
-        tabFolder = new TabFolder(this.getShell(), SWT.BORDER);
+        tabFolder = new CTabFolder(this.getShell(), SWT.BORDER);
         tabFolder.setEnabled(true);
 
-        valueTab = new TabItem(tabFolder, SWT.NONE);
+        valueTab = new CTabItem(tabFolder, SWT.NONE);
         valueTab.setText("Value");
 
         GridData gd = new GridData();
@@ -87,6 +87,7 @@ public class ValueBox extends MoveBox {
         layout1.marginWidth = 0;
         nodeComposite.setLayout(layout1);
         valueTab.setControl(nodeComposite);
+        tabFolder.setSelection(0);
 
         createValueWidget(nodeComposite);
     }
