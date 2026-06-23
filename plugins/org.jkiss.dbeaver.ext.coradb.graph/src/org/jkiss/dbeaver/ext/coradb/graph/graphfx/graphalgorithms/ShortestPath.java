@@ -31,7 +31,7 @@ import org.jkiss.dbeaver.ext.coradb.graph.data.NodesEdges;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.Entry;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.FxEdge;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.HeapAdaptablePriorityQueue;
-import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.TurboGraphList;
+import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.CoraDbGraphList;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.Vertex;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.SmartGraphPanel;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.SmartStyleProxy;
@@ -55,7 +55,7 @@ public class ShortestPath {
      *     algorithm
      */
     public static NodesEdges start(
-            TurboGraphList<CypherNode, CypherEdge> digraph,
+            CoraDbGraphList<CypherNode, CypherEdge> digraph,
             SmartGraphPanel<CypherNode, CypherEdge> graphView,
             Vertex<CypherNode> startVertex,
             Vertex<CypherNode> endVertex,
@@ -89,7 +89,7 @@ public class ShortestPath {
      * @param weight The weight count of the shortest path
      */
     private static boolean dijkstra(
-            TurboGraphList<CypherNode, CypherEdge> digraph,
+            CoraDbGraphList<CypherNode, CypherEdge> digraph,
             Vertex<CypherNode> startVertex,
             Vertex<CypherNode> endVertex,
             LinkedHashMap<Vertex<CypherNode>, Integer> d,
@@ -168,7 +168,7 @@ public class ShortestPath {
      * @param graphView Graph visualization object
      */
     private static NodesEdges generatePath(
-            TurboGraphList<CypherNode, CypherEdge> digraph,
+            CoraDbGraphList<CypherNode, CypherEdge> digraph,
             Vertex<CypherNode> startVertex,
             Vertex<CypherNode> endVertex,
             LinkedHashMap<Vertex<CypherNode>, Integer> d,

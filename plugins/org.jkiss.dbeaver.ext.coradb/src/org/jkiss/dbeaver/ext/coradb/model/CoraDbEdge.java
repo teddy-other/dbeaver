@@ -53,14 +53,6 @@ public class CoraDbEdge extends GenericTable {
     	return super.getAttributes(monitor);
     }
     
-//    
-//    
-//    @Override
-//    public List<? extends TurboGraphPPVertexColumn> getAttributes(DBRProgressMonitor monitor)
-//            throws DBException {
-//        return (List<? extends TurboGraphPPVertexColumn>) super.getAttributes(monitor);
-//    }
-    
     @Override
     public DBCStatistics readData(
             DBCExecutionSource source,

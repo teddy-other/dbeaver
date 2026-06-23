@@ -28,11 +28,11 @@ import org.jkiss.dbeaver.model.exec.plan.DBCPlan;
 import org.jkiss.dbeaver.model.sql.SQLQuery;
 import org.jkiss.dbeaver.ui.UIUtils;
 
-public class TurboGraphPlanText extends Viewer {
+public class CoraDbPlanText extends Viewer {
     private Text sqlText;
     private SQLQuery plan;
 
-    public TurboGraphPlanText(final IWorkbenchPart workbenchPart, Composite parent) {
+    public CoraDbPlanText(final IWorkbenchPart workbenchPart, Composite parent) {
         super();
         Composite composite = UIUtils.createPlaceholder(parent, 1);
         composite.setLayoutData(new GridData(GridData.FILL_BOTH));

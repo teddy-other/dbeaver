@@ -84,7 +84,7 @@ import org.jkiss.dbeaver.ext.coradb.graph.data.GraphDataModel;
 import org.jkiss.dbeaver.ext.coradb.graph.data.NodesEdges;
 import org.jkiss.dbeaver.ext.coradb.graph.dialog.CSVDialog;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.FxEdge;
-import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.TurboGraphList;
+import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.CoraDbGraphList;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graph.Vertex;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphalgorithms.ShortestPath;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.SmartGraphPanel;
@@ -116,7 +116,7 @@ public class FXGraph implements GraphBase {
     public static final int BROWSER_TAP = 1;
 
     private FXCanvas canvas;
-    private TurboGraphList<CypherNode, CypherEdge> graph;
+    private CoraDbGraphList<CypherNode, CypherEdge> graph;
     private SmartGraphPanel<CypherNode, CypherEdge> graphView;
     Group graphGroup;
     private ScrollPane scrollPane;
@@ -222,7 +222,7 @@ public class FXGraph implements GraphBase {
 
         canvas = new FXCanvas(graphComposite, SWT.NONE);
 
-        graph = new TurboGraphList<>();
+        graph = new CoraDbGraphList<>();
 
         SmartPlacementStrategy strategy = new SmartRandomPlacementStrategy();
 
@@ -1396,7 +1396,7 @@ public class FXGraph implements GraphBase {
         return graphView;
     }
 
-    public TurboGraphList<CypherNode, CypherEdge> getGraph() {
+    public CoraDbGraphList<CypherNode, CypherEdge> getGraph() {
         return graph;
     }
 

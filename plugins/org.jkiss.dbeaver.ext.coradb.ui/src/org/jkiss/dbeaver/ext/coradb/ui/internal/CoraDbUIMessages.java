@@ -19,9 +19,9 @@ package org.jkiss.dbeaver.ext.coradb.ui.internal;
 
 import org.eclipse.osgi.util.NLS;
 
-public class TurboGraphPPUIMessages extends NLS {
+public class CoraDbUIMessages extends NLS {
     static final String BUNDLE_NAME =
-            "org.jkiss.dbeaver.ext.coradb.ui.internal.TurboGraphPPUIMessages"; //$NON-NLS-1$
+            "org.jkiss.dbeaver.ext.coradb.ui.internal.CoraDbUIMessages"; //$NON-NLS-1$
     public static String dialog_connection_advanced_tab;
     public static String dialog_connection_advanced_tab_tooltip;
     public static String dialog_connection_browse_button;
@@ -52,8 +52,8 @@ public class TurboGraphPPUIMessages extends NLS {
 
     static {
         // initialize resource bundle
-        NLS.initializeMessages(BUNDLE_NAME, TurboGraphPPUIMessages.class);
+        NLS.initializeMessages(BUNDLE_NAME, CoraDbUIMessages.class);
     }
 
-    private TurboGraphPPUIMessages() {}
+    private CoraDbUIMessages() {}
 }

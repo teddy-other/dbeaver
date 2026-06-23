@@ -25,12 +25,12 @@ import org.jkiss.dbeaver.model.exec.plan.DBCPlan;
 import org.jkiss.dbeaver.model.sql.SQLQuery;
 import org.jkiss.dbeaver.ui.editors.sql.plan.simple.SQLPlanViewProviderSimple;
 
-public class TurboGraphPPPlanViewProvider extends SQLPlanViewProviderSimple {
+public class CoraDbPlanViewProvider extends SQLPlanViewProviderSimple {
 
     
     @Override
     public Viewer createPlanViewer(IWorkbenchPart workbenchPart, Composite parent) {
-        TurboGraphPlanText treeViewer = new TurboGraphPlanText(workbenchPart, parent);
+        CoraDbPlanText treeViewer = new CoraDbPlanText(workbenchPart, parent);
         return treeViewer;
     }
 
@@ -48,7 +48,7 @@ public class TurboGraphPPPlanViewProvider extends SQLPlanViewProviderSimple {
 
     @Override
     protected void showPlan(Viewer viewer, SQLQuery query, DBCPlan plan) {
-        TurboGraphPlanText treeViewer = (TurboGraphPlanText) viewer;
+        CoraDbPlanText treeViewer = (CoraDbPlanText) viewer;
         treeViewer.showPlan(query, plan);
     }
 }

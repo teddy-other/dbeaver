@@ -62,7 +62,7 @@ import org.jkiss.dbeaver.ext.coradb.graph.GraphBase.LayoutStyle;
 import org.jkiss.dbeaver.ext.coradb.graph.GraphIcons;
 import org.jkiss.dbeaver.ext.coradb.graph.UIIcon;
 import org.jkiss.dbeaver.ext.coradb.graph.data.DataRowID;
-import org.jkiss.dbeaver.ext.coradb.ui.internal.TurboGraphPPUIMessages;
+import org.jkiss.dbeaver.ext.coradb.ui.internal.CoraDbUIMessages;
 import org.jkiss.dbeaver.model.DBConstants;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.data.DBDAttributeBinding;
@@ -414,7 +414,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         Button detachButton = new Button(menuComposite0, SWT.PUSH);
         detachButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_DETACH_WINDOW));
         detachButton.setToolTipText(
-                TurboGraphPPUIMessages.visualization_detach_window_button_tool_tip);
+                CoraDbUIMessages.visualization_detach_window_button_tool_tip);
         detachButton.setData(ImageButton.DETACH_WINDOW);
         detachButton.addSelectionListener(imageButtonListener);
 
@@ -430,7 +430,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         Button MiniMapButton = new Button(menuComposite1, SWT.PUSH);
         MiniMapButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_MINI_MAP));
         MiniMapButton.setToolTipText(
-                TurboGraphPPUIMessages.visualization_minimap_window_button_tool_tip);
+                CoraDbUIMessages.visualization_minimap_window_button_tool_tip);
         MiniMapButton.setData(ImageButton.MINI_MAP);
         MiniMapButton.addSelectionListener(imageButtonListener);
         graphButtonList.add(MiniMapButton);
@@ -468,7 +468,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
         shortestButton = new Button(menuComposite3, SWT.PUSH);
         shortestButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_SHORTEST_PATH));
         shortestButton.setToolTipText(
-                TurboGraphPPUIMessages.visualization_shortest_button_tool_tip);
+                CoraDbUIMessages.visualization_shortest_button_tool_tip);
         shortestButton.setData(ImageButton.SHORTEST);
         shortestButton.addSelectionListener(imageButtonListener);
         shortestButton.pack();
@@ -476,7 +476,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
         button1 = new Button(menuComposite3, SWT.PUSH);
         button1.setImage(GraphIcons.getImage(UIIcon.CHART_BAR));
-        button1.setToolTipText(TurboGraphPPUIMessages.visualization_chart_button_tool_tip);
+        button1.setToolTipText(CoraDbUIMessages.visualization_chart_button_tool_tip);
         button1.setData(ImageButton.CHART);
         button1.addSelectionListener(imageButtonListener);
         button1.pack();
@@ -493,7 +493,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
         button1 = new Button(menuComposite4, SWT.PUSH);
         button1.setImage(GraphIcons.getImage(UIIcon.PROPERTIES));
-        button1.setToolTipText(TurboGraphPPUIMessages.visualization_value_button_tool_tip);
+        button1.setToolTipText(CoraDbUIMessages.visualization_value_button_tool_tip);
         button1.setData(ImageButton.VALUE);
         button1.addSelectionListener(imageButtonListener);
         button1.pack();
@@ -501,7 +501,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
         button1 = new Button(menuComposite4, SWT.PUSH);
         button1.setImage(GraphIcons.getImage(UIIcon.BUTTON_DESIGN));
-        button1.setToolTipText(TurboGraphPPUIMessages.visualization_open_design_edit_button_tool_tip);
+        button1.setToolTipText(CoraDbUIMessages.visualization_open_design_edit_button_tool_tip);
         button1.setData(ImageButton.DESIGN);
         button1.addSelectionListener(imageButtonListener);
         button1.pack();
@@ -509,7 +509,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
         button1 = new Button(menuComposite4, SWT.PUSH);
         button1.setImage(GraphIcons.getImage(UIIcon.BUTTON_CAPTURE));
-        button1.setToolTipText(TurboGraphPPUIMessages.visualization_capture_button_tool_tip);
+        button1.setToolTipText(CoraDbUIMessages.visualization_capture_button_tool_tip);
         button1.setData(ImageButton.CAPTURE);
         button1.addSelectionListener(imageButtonListener);
         button1.pack();
@@ -517,7 +517,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
         button1 = new Button(menuComposite4, SWT.PUSH);
         button1.setImage(GraphIcons.getImage(UIIcon.BUTTON_CSV_FILE));
-        button1.setToolTipText(TurboGraphPPUIMessages.visualization_to_csv_file_button_tool_tip);
+        button1.setToolTipText(CoraDbUIMessages.visualization_to_csv_file_button_tool_tip);
         button1.setData(ImageButton.TO_CSV);
         button1.addSelectionListener(imageButtonListener);
         button1.pack();
@@ -533,7 +533,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
         fetchNextButton = new Button(menuComposite5, SWT.PUSH);
         fetchNextButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_FETCH_NEXT));
-        fetchNextButton.setToolTipText(TurboGraphPPUIMessages.visualization_next_data_button_tool_tip);
+        fetchNextButton.setToolTipText(CoraDbUIMessages.visualization_next_data_button_tool_tip);
         fetchNextButton.setData(ImageButton.NEXT_DATA);
         fetchNextButton.addSelectionListener(imageButtonListener);
         fetchNextButton.setEnabled(false);
@@ -541,7 +541,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
 
         fetchEndButton = new Button(menuComposite5, SWT.PUSH);
         fetchEndButton.setImage(GraphIcons.getImage(UIIcon.BUTTON_FETCH_ALL));
-        fetchEndButton.setToolTipText(TurboGraphPPUIMessages.visualization_all_data_button_tool_tip);
+        fetchEndButton.setToolTipText(CoraDbUIMessages.visualization_all_data_button_tool_tip);
         fetchEndButton.setData(ImageButton.ALL_DATA);
         fetchEndButton.addSelectionListener(imageButtonListener);
         fetchEndButton.setEnabled(false);
@@ -637,7 +637,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
     }
 
     /**
-     * Add a node from the new CoraDB / TurboGraph++ JDBC graph payload.
+     * Add a node from the new CoraDB JDBC graph payload.
      * <pre>
      * {
      *   "id": "(0|4033|16)",
@@ -676,7 +676,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
     }
 
     /**
-     * Add an edge from the new CoraDB / TurboGraph++ JDBC graph payload.
+     * Add an edge from the new CoraDB JDBC graph payload.
      * <pre>
      * {
      *   "id": "(0|4545|31)",
@@ -1121,13 +1121,18 @@ public class VisualizationPresentation extends AbstractPresentation implements I
                 nodeRowData.add(new NEO4JRowData(i, false, attr));
             } else if ("RELATIONSHIP".equals(graphType)) { // Neo4j Edge
                 edgeRowData.add(new NEO4JRowData(i, true, attr));
-            } else {
+            } else if ("JSON".equals(graphType)) {
+                if (attr.getLabel().contains("json_info")) {
+                    buildCoraDBGraphForJsonInfo(allRows);
+                } else if (attr.getLabel().contains("json_graph")) {
+                    buildCoraDBGraphForJsonGraph(allRows);
+                }
             	break;
             }
         }
         
         if (nodeRowData.isEmpty() && edgeRowData.isEmpty()) {
-            buildCoraDBGraph(allRows);
+            //nothing
         } else {
 	        for (int i = 0; i < allRows.size(); i++) { // Add Node
 	            ResultSetRow row = allRows.get(i);
@@ -1191,30 +1196,11 @@ public class VisualizationPresentation extends AbstractPresentation implements I
     }
 
     /**
-     * Inspect the first non-null cell of the column to decide whether it
-     * produces the new CoraDB / TurboGraph++ JSON-shaped graph payload.
-     */
-    private boolean looksLikeCoraDBGraphColumn(
-            ResultSetModel model, DBDAttributeBinding attr, List<ResultSetRow> rows) {
-        if (rows == null || rows.isEmpty()) {
-            return false;
-        }
-        for (ResultSetRow row : rows) {
-            Object cellValue = model.getCellValue(attr, row);
-            if (cellValue == null) {
-                continue;
-            }
-            return true;
-        }
-        return false;
-    }
-    
-    /**
      * Parses CoraDB JSON rows where each row value is a JSON string.
      * Nodes carry adj_list (with edge connectivity); edges do not.
      * Two-phase: collect all nodes/edges first, then add to visualGraph.
      */
-    private void buildCoraDBGraph(List<ResultSetRow> rows) {
+    private void buildCoraDBGraphForJsonInfo(List<ResultSetRow> rows) {
         Gson gson = new Gson();
         Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
 
@@ -1303,6 +1289,62 @@ public class VisualizationPresentation extends AbstractPresentation implements I
                 }
             }
             addCoraDBEdge(null, edgeRowRef.get(edgeId), "", edgeMap);
+        }
+    }
+    
+    private void buildCoraDBGraphForJsonGraph(List<ResultSetRow> rows) {
+        Gson gson = new Gson();
+        Type mapType = new TypeToken<Map<String, Object>>() {}.getType();
+
+        // Collect edges after all nodes are registered
+        List<Object[]> pendingEdges = new ArrayList<>();
+
+        for (ResultSetRow row : rows) {
+            for (Object obj : row.getValues()) {
+                if (!(obj instanceof String)) {
+                    continue;
+                }
+                String jsonData = obj.toString().trim();
+                if (jsonData.isEmpty()) {
+                    continue;
+                }
+                try {
+                    Map<String, Object> root = gson.fromJson(jsonData, mapType);
+                    if (root == null) {
+                        continue;
+                    }
+                    // Phase 1: nodes
+                    Object nodesObj = root.get("nodes");
+                    if (nodesObj instanceof List) {
+                        for (Object nodeEntry : (List<?>) nodesObj) {
+                            if (nodeEntry instanceof Map) {
+                                @SuppressWarnings("unchecked")
+                                Map<String, Object> nodeMap = (Map<String, Object>) nodeEntry;
+                                addCoraDBNode(null, row, "", nodeMap);
+                            }
+                        }
+                    }
+                    // Defer edges until all nodes across all rows are added
+                    Object edgesObj = root.get("edges");
+                    if (edgesObj instanceof List) {
+                        for (Object edgeEntry : (List<?>) edgesObj) {
+                            if (edgeEntry instanceof Map) {
+                                pendingEdges.add(new Object[]{edgeEntry, row});
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    // ignore malformed JSON
+                }
+            }
+        }
+
+        // Phase 2: edges — startNodeId/endNodeId are explicit in the payload
+        for (Object[] pending : pendingEdges) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> edgeMap = (Map<String, Object>) pending[0];
+            ResultSetRow row = (ResultSetRow) pending[1];
+            addCoraDBEdge(null, row, "", edgeMap);
         }
     }
 

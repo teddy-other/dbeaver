@@ -1,6 +1,6 @@
 ﻿Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: DBeaver TurboGraphPP Graph Support
+Bundle-Name: DBeaver CoraDB Graph Support
 Bundle-SymbolicName: org.jkiss.dbeaver.ext.coradb.graph;singleton:=true
 Bundle-Version: 1.0.1.qualifier
 Bundle-Release-Date: 20220320

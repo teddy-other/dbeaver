@@ -133,7 +133,6 @@ public class Neo4jEdge extends CoraDbEdge {
                     "MATCH ()-[r:" + edgeType + "]-() WITH r LIMIT 200 RETURN DISTINCT keys(r)";
             try (JDBCPreparedStatement dbStat = session.prepareStatement(gql)) {
                 try (JDBCResultSet dbResult = dbStat.executeQuery()) {
-                    // List<TurboGraphPPEdge> edgeList = new ArrayList<>();
                     String edgesPropery = null;
                     Set<Neo4jProperty> setList = new HashSet<>();
                     properties = null;

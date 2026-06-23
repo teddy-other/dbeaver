@@ -114,7 +114,7 @@ public class CoraDbDialect extends GenericSQLDialect {
     @NotNull
     @Override
     public String getDialectName() {
-        return "TurboGraph++";
+        return "CoraDB";
     }
 
     @Nullable

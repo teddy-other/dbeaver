@@ -153,41 +153,6 @@ public class CoraDbVertex extends GenericTable {
         return false;
     }
     
-//    private List<CoraDbVertexColumn> getProperties(DBRProgressMonitor monitor) throws DBException {
-//        if (this.properties != null) {
-//            return this.properties;
-//        }
-//
-//        try (JDBCSession session = DBUtils.openMetaSession(monitor, this, "Load Edges Propeties")) {
-//            String gql =
-//                    "MATCH (n:" + this.getName() +") WITH n LIMIT 200 RETURN DISTINCT keys(n)";
-//            try (JDBCPreparedStatement dbStat = session.prepareStatement(gql)) {
-//                try (JDBCResultSet dbResult = dbStat.executeQuery()) {
-//                    // List<TurboGraphPPEdge> edgeList = new ArrayList<>();
-//                    String edgesPropery = null;
-//                    Set<Neo4jProperty> setList = new HashSet<>();
-//                    properties = null;
-//                    while (dbResult.next()) {
-//                        edgesPropery = JDBCUtils.safeGetString(dbResult, "keys(n)");
-//                        if (edgesPropery != null && !edgesPropery.equals("[]")) {
-//                            edgesPropery = edgesPropery.replace(String.valueOf('['), "");
-//                            edgesPropery = edgesPropery.replace(String.valueOf(']'), "");
-//                            String[] propertiesList = edgesPropery.split(", ");
-//                            for (int i = 0; i < propertiesList.length; i++) {
-//                                propertiesList[i] = propertiesList[i].replaceAll("\"", "");
-//                                setList.add(new Neo4jProperty(this, propertiesList[i]));
-//                            }
-//                        }
-//                    }
-//                    properties = new ArrayList<>(setList);
-//                    return properties;
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            throw new DBException(ex.toString());
-//        }
-//    }
-    
     @Property(viewable = true, order = 1)
     public String getName() {
         return super.getName();

@@ -37,7 +37,7 @@ import java.util.*;
  * @param <V> Vertex type
  * @param <E> Edge type
  */
-public class TurboGraphList<V, E> implements Graph<V, E> {
+public class CoraDbGraphList<V, E> implements Graph<V, E> {
 
     private Map<V, Vertex<V>> vertices;
     private Map<E, FxEdge<E, V>> edges;
@@ -179,7 +179,7 @@ public class TurboGraphList<V, E> implements Graph<V, E> {
      * order of vertices and elements. This also provides a faster iteration in the
      * Java for-each loop than HashMap.
      */
-    public TurboGraphList() {
+    public CoraDbGraphList() {
         this.vertices = new LinkedHashMap<>();
         this.edges = new LinkedHashMap<>();
     }

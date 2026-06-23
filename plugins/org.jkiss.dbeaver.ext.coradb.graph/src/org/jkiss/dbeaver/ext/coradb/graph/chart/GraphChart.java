@@ -626,7 +626,7 @@ public class GraphChart extends MoveBox {
     }
 
     private void updatePropertiesInAll(String label) {
-        new AbstractJob("Get TurboGraph Info") {
+        new AbstractJob("Get CoraDB Info") {
             {
                 setUser(true);
             }

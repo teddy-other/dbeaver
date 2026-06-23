@@ -9,7 +9,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>JavaFX local p2 site (reficio) — TurboGraphPP FXGraph</name>
+    <name>JavaFX local p2 site (reficio) — CoraDB FXGraph</name>
     <description>
         Physical p2 update site under target/repository/ (plugins + content.xml + artifacts.xml).
         OpenJFX 23.0.2 base/controls/graphics per OS classifier plus at.bestsolution.openjfx:javafx-swt (BestSolution Maven).

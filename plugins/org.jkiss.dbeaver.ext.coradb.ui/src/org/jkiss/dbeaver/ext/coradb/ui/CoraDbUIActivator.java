@@ -20,13 +20,13 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-public class TurboGraphPPUIActivator extends AbstractUIPlugin {
+public class CoraDbUIActivator extends AbstractUIPlugin {
 
     public static final String PLUGIN_ID = "org.jkiss.dbeaver.ext.coradb.ui";
 
-    private static TurboGraphPPUIActivator plugin;
+    private static CoraDbUIActivator plugin;
 
-    public TurboGraphPPUIActivator() {}
+    public CoraDbUIActivator() {}
 
     @Override
     public void start(BundleContext context) throws Exception {
@@ -40,7 +40,7 @@ public class TurboGraphPPUIActivator extends AbstractUIPlugin {
         super.stop(context);
     }
 
-    public static TurboGraphPPUIActivator getDefault() {
+    public static CoraDbUIActivator getDefault() {
         return plugin;
     }
 
