@@ -38,7 +38,8 @@ import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.SmartGraphPanel;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.SmartGraphVertex;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.type.DoublePoint;
 
-public class SmartVerticalTreePlacementStrategy implements SmartPlacementStrategy {
+
+public class SmartVerticalTreePlacementStrategy extends AbstractTreePlacementStrategy {
 
     private final int INCREMENT_VALUE = 100;
     private final int LINE_INCREMENT_VALUE = 200;
@@ -221,52 +222,4 @@ public class SmartVerticalTreePlacementStrategy implements SmartPlacementStrateg
         return list;
     }
 
-    protected <V, E> SmartGraphVertex<V> searchGrandParent(
-            SmartGraphPanel<V, E> smartGraphPanel,
-            Graph<V, E> graph,
-            SmartGraphVertex<V> vertex,
-            SmartGraphVertex<V> initVertex,
-            SmartGraphVertex<V> childVertex) {
-
-        Iterable<FxEdge<E, V>> inBoundEdges = graph.incomingEdges(vertex.getUnderlyingVertex());
-        SmartGraphVertex<V> firstVertex = null;
-        if (initVertex == null) {
-            firstVertex = vertex;
-        } else {
-            firstVertex = initVertex;
-        }
-
-        if (((Collection<?>) inBoundEdges).size() < 1) {
-            return null;
-        }
-
-        Vertex<V> parentV = null;
-        SmartGraphVertex<V> smartparentV = null;
-        SmartGraphVertex<V> smartGrandParentV = null;
-        for (FxEdge<E, V> edge : inBoundEdges) {
-            parentV = (Vertex<V>) edge.vertices()[0];
-            smartparentV = smartGraphPanel.getGraphVertex(parentV);
-            if (smartparentV.equals(childVertex)) {
-                return firstVertex;
-            }
-
-            smartGrandParentV =
-                    searchGrandParent(smartGraphPanel, graph, smartparentV, firstVertex, vertex);
-            if (smartGrandParentV != null) {
-                if (smartGrandParentV.equals(firstVertex)) {
-                    return firstVertex;
-                }
-            }
-        }
-
-        if (smartGrandParentV == null) {
-            return smartparentV;
-        }
-
-        if (smartparentV == null) {
-            return vertex;
-        }
-
-        return smartGrandParentV;
-    }
 }

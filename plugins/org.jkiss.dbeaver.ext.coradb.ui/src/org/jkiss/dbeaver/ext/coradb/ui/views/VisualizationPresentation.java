@@ -1339,7 +1339,7 @@ public class VisualizationPresentation extends AbstractPresentation implements I
             }
         }
 
-        // Phase 2: edges — startNodeId/endNodeId are explicit in the payload
+        // Not needed now, but for the future
         for (Object[] pending : pendingEdges) {
             @SuppressWarnings("unchecked")
             Map<String, Object> edgeMap = (Map<String, Object>) pending[0];

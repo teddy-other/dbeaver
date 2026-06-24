@@ -37,7 +37,8 @@ import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.SmartGraphVertex;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.UtilitiesPoint2D;
 import org.jkiss.dbeaver.ext.coradb.graph.graphfx.graphview.type.DoublePoint;
 
-public class SmartCircularGroupPlacementStrategy implements SmartPlacementStrategy {
+
+public class SmartCircularGroupPlacementStrategy extends AbstractTreePlacementStrategy {
 
     private double paneWidth = 0;
     private double paneHeight = 0;
@@ -236,103 +237,6 @@ public class SmartCircularGroupPlacementStrategy implements SmartPlacementStrate
         return list;
     }
 
-    protected <V, E> SmartGraphVertex<V> searchChildParent(
-            SmartGraphPanel<V, E> smartGraphPanel,
-            Graph<V, E> graph,
-            SmartGraphVertex<V> vertex,
-            SmartGraphVertex<V> initVertex,
-            SmartGraphVertex<V> childVertex) {
-
-        Iterable<FxEdge<E, V>> outBoundEdges = graph.outboundEdges(vertex.getUnderlyingVertex());
-        SmartGraphVertex<V> firstVertex = null;
-        if (initVertex == null) {
-            firstVertex = vertex;
-        } else {
-            firstVertex = initVertex;
-        }
-
-        if (((Collection<?>) outBoundEdges).size() < 1) {
-            return null;
-        }
-
-        Vertex<V> parentV = null;
-        SmartGraphVertex<V> smartparentV = null;
-        SmartGraphVertex<V> smartGrandParentV = null;
-        for (FxEdge<E, V> edge : outBoundEdges) {
-            parentV = (Vertex<V>) edge.vertices()[1];
-            smartparentV = smartGraphPanel.getGraphVertex(parentV);
-            if (smartparentV.equals(childVertex)) {
-                return firstVertex;
-            }
-
-            smartGrandParentV =
-                    searchChildParent(smartGraphPanel, graph, smartparentV, firstVertex, vertex);
-            if (smartGrandParentV != null) {
-                if (smartGrandParentV.equals(firstVertex)) {
-                    return firstVertex;
-                }
-            }
-        }
-
-        if (smartGrandParentV == null) {
-            return smartparentV;
-        }
-
-        if (smartparentV == null) {
-            return vertex;
-        }
-
-        return smartGrandParentV;
-    }
-
-    protected <V, E> SmartGraphVertex<V> searchGrandParent(
-            SmartGraphPanel<V, E> smartGraphPanel,
-            Graph<V, E> graph,
-            SmartGraphVertex<V> vertex,
-            SmartGraphVertex<V> initVertex,
-            SmartGraphVertex<V> childVertex) {
-
-        Iterable<FxEdge<E, V>> inBoundEdges = graph.incomingEdges(vertex.getUnderlyingVertex());
-        SmartGraphVertex<V> firstVertex = null;
-        if (initVertex == null) {
-            firstVertex = vertex;
-        } else {
-            firstVertex = initVertex;
-        }
-
-        if (((Collection<?>) inBoundEdges).size() < 1) {
-            return null;
-        }
-
-        Vertex<V> parentV = null;
-        SmartGraphVertex<V> smartparentV = null;
-        SmartGraphVertex<V> smartGrandParentV = null;
-        for (FxEdge<E, V> edge : inBoundEdges) {
-            parentV = (Vertex<V>) edge.vertices()[0];
-            smartparentV = smartGraphPanel.getGraphVertex(parentV);
-            if (smartparentV.equals(childVertex)) {
-                return firstVertex;
-            }
-
-            smartGrandParentV =
-                    searchGrandParent(smartGraphPanel, graph, smartparentV, firstVertex, vertex);
-            if (smartGrandParentV != null) {
-                if (smartGrandParentV.equals(firstVertex)) {
-                    return firstVertex;
-                }
-            }
-        }
-
-        if (smartGrandParentV == null) {
-            return smartparentV;
-        }
-
-        if (smartparentV == null) {
-            return vertex;
-        }
-
-        return smartGrandParentV;
-    }
 
     protected <V, E> void changePaneArea(SmartGraphPanel<V, E> smartGraphPanel, DoublePoint size) {
         if (size.getX() > paneWidth) {
