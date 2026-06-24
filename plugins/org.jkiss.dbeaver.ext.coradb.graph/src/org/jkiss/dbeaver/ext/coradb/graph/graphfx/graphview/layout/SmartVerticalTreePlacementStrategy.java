@@ -79,11 +79,7 @@ public class SmartVerticalTreePlacementStrategy extends AbstractTreePlacementStr
             SmartGraphVertex<V> targetVertex =
                     searchGrandParent(smartGraphPanel, graph, vertex, vertex, null);
 
-            if (targetVertex != null) {
-                if (targetVertex.equals(vertex)) {
-                    notVisitedVertexs.put(vertex, false);
-                    continue;
-                }
+            if (targetVertex != null && !targetVertex.equals(vertex)) {
                 vertex = targetVertex;
             }
 
