@@ -24,6 +24,7 @@
             description="CoraDB JDBC Driver"
             icon="icons/coradb_icon.png"
             id="coradb"
+            parent="generic"
             label="coradb jdbc"
             dialect="coradb">
             <tree path="coradb" label="CoraDB data source" supportsEntityMerge="true">
@@ -60,9 +61,9 @@
                         defaultPort="30000"
                         description="CORADB JDBC driver"
                         supportedConfigurationTypes="MANUAL,URL"
-                        webURL="https://www.cubrid.org/manual/en/11.2/api/jdbc.html#configuration-connection"
+                        webURL="https://www.coradb.ai/"
                         categories="sql">
-                        <file type="jar" path="driver/coradb"/>
+                        <file type="jar" path="https://ftp.cubrid.org/iitp/coradb/jdbc/JDBC-1.0.0.1581-coradb.jar"/>
                         <parameter name="stored-unquoted-case" value="UPPER"/>
 	                    <property name="altHosts" value=""/>
 	                    <property name="rcTime" value="600"/>

@@ -44,12 +44,14 @@ public class CoraDbDataSourceProvider extends GenericDataSourceProvider<CoraDbDa
     	return new CoraDbDataSource(monitor, container, new CoraDbMetaModel(), new CoraDbDialect());
     }
 
-    @Override
     public DBPPropertyDescriptor[] getConnectionProperties(
-            DBRProgressMonitor monitor, DBPDriver driver, DBPConnectionConfiguration connectionInfo)
+            DBRProgressMonitor monitor, 
+            DBPDriver driver,
+            DBPDataSourceContainer dataSourceContainer,
+            DBPConnectionConfiguration connectionInfo)
             throws DBException {
         DBPPropertyDescriptor[] connectionProperties =
-                super.getConnectionProperties(monitor, driver, connectionInfo);
+                super.getConnectionProperties(monitor, driver, dataSourceContainer, connectionInfo);
         if (connectionProperties == null || connectionProperties.length == 0) {
             // Try to get list of supported properties from custom driver config
             String driverParametersString =

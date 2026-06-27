@@ -24,15 +24,12 @@ import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.ext.generic.model.GenericDataSource;
 import org.jkiss.dbeaver.ext.coradb.model.meta.CoraDbMetaModel;
-import org.jkiss.dbeaver.ext.coradb.model.plan.CoraDbPlanAnalyser;
 import org.jkiss.dbeaver.model.DBPDataSourceContainer;
-import org.jkiss.dbeaver.model.DBPDataSourceInfo;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCDatabaseMetaData;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCPreparedStatement;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCStatement;
-import org.jkiss.dbeaver.model.exec.plan.DBCQueryPlanner;
 import org.jkiss.dbeaver.model.impl.jdbc.JDBCUtils;
 import org.jkiss.dbeaver.model.impl.jdbc.cache.JDBCObjectCache;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
@@ -77,21 +74,16 @@ public class CoraDbDataSource extends GenericDataSource {
         return super.refreshObject(monitor);
     }
     
-    public List<CoradbUser> getCoradbUsers(@NotNull DBRProgressMonitor monitor) throws DBException {
+    public List<CoraDbUser> getCoradbUsers(@NotNull DBRProgressMonitor monitor) throws DBException {
         return userCache.getAllObjects(monitor, this);
     }
     
     @Override
     public <T> T getAdapter(Class<T> adapter) {
-        if (!this.isNeo4j) {
-            if (adapter == DBCQueryPlanner.class) {
-                return adapter.cast(new CoraDbPlanAnalyser(this));
-            }
-        }
         return super.getAdapter(adapter);
     }
     
-    public class CoradbUserCache extends JDBCObjectCache<CoraDbDataSource, CoradbUser> {
+    public class CoradbUserCache extends JDBCObjectCache<CoraDbDataSource, CoraDbUser> {
         @NotNull
         @Override
         protected JDBCStatement prepareObjectsStatement(
@@ -110,7 +102,7 @@ public class CoraDbDataSource extends GenericDataSource {
 
         @Nullable
         @Override
-        protected CoradbUser fetchObject(
+        protected CoraDbUser fetchObject(
                 @NotNull JDBCSession session,
                 @NotNull CoraDbDataSource container,
                 @NotNull JDBCResultSet dbResult)
@@ -120,7 +112,7 @@ public class CoraDbDataSource extends GenericDataSource {
             if (!container.isNeo4j) {
             	comment = JDBCUtils.safeGetString(dbResult, "comment");
             }
-            return new CoradbUser(container, name, comment);
+            return new CoraDbUser(container, name, comment);
         }
 
     }

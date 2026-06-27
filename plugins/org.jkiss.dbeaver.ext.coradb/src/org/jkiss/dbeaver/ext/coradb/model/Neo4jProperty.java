@@ -19,8 +19,6 @@ package org.jkiss.dbeaver.ext.coradb.model;
 import java.util.Objects;
 
 import org.jkiss.dbeaver.DBException;
-import org.jkiss.dbeaver.ext.generic.model.GenericTable;
-import org.jkiss.dbeaver.ext.generic.model.GenericTableBase;
 import org.jkiss.dbeaver.model.meta.Property;
 
 public class Neo4jProperty extends CoraDbVertexColumn {

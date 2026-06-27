@@ -22,7 +22,6 @@ import java.util.*;
 import org.jkiss.code.NotNull;
 import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.DBException;
-import org.jkiss.dbeaver.ext.cubrid.model.QueryTransformerLimitCubrid;
 import org.jkiss.dbeaver.ext.generic.GenericConstants;
 import org.jkiss.dbeaver.ext.generic.model.*;
 import org.jkiss.dbeaver.ext.generic.model.meta.GenericMetaModel;
@@ -30,6 +29,8 @@ import org.jkiss.dbeaver.ext.generic.model.meta.GenericMetaObject;
 import org.jkiss.dbeaver.ext.coradb.model.CoraDbVertex;
 import org.jkiss.dbeaver.ext.coradb.model.CoraDbVertexColumn;
 import org.jkiss.dbeaver.ext.coradb.model.QueryTransformerLimitCoraDB;
+import org.jkiss.dbeaver.ext.coradb.model.plan.CoraDbQueryPlanner;
+import org.jkiss.dbeaver.ext.coradb.model.CoraDbDataSource;
 import org.jkiss.dbeaver.ext.coradb.model.CoraDbEdge;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.exec.DBCQueryTransformProvider;
@@ -38,6 +39,7 @@ import org.jkiss.dbeaver.model.exec.DBCQueryTransformer;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCStatement;
+import org.jkiss.dbeaver.model.exec.plan.DBCQueryPlanner;
 import org.jkiss.dbeaver.model.impl.jdbc.JDBCConstants;
 import org.jkiss.dbeaver.model.impl.jdbc.JDBCUtils;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
@@ -146,5 +148,10 @@ public class CoraDbMetaModel extends GenericMetaModel implements DBCQueryTransfo
             return new QueryTransformerLimitCoraDB();
         }
         return null;
+    }
+    
+    @Override
+    public DBCQueryPlanner getQueryPlanner(GenericDataSource dataSource) {
+        return new CoraDbQueryPlanner((CoraDbDataSource)dataSource);
     }
 }

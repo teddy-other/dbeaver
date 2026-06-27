@@ -25,7 +25,6 @@ import org.jkiss.code.Nullable;
 import org.jkiss.dbeaver.ext.generic.model.GenericSQLDialect;
 import org.jkiss.dbeaver.model.DBPIdentifierCase;
 import org.jkiss.dbeaver.model.DBPKeywordType;
-import org.jkiss.dbeaver.model.sql.SQLStateType;
 
 public class CoraDbDialect extends GenericSQLDialect {
 

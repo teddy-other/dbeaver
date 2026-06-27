@@ -112,7 +112,7 @@ public class Neo4jEdge extends CoraDbEdge {
     public Neo4jProperty getAttribute(
             @NotNull DBRProgressMonitor monitor, @NotNull String attributeName) throws DBException {
         if (properties != null) {
-            Iterator itr = properties.iterator();
+            Iterator<CoraDbVertexColumn> itr = properties.iterator();
             while (itr.hasNext()) {
                 Neo4jProperty property = (Neo4jProperty) itr.next();
                 if (property.getName() == attributeName) {

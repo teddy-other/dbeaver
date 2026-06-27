@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.jkiss.dbeaver.DBException;
 import org.jkiss.dbeaver.ext.generic.model.GenericSchema;
-import org.jkiss.dbeaver.ext.generic.model.GenericView;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCPreparedStatement;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCResultSet;
 import org.jkiss.dbeaver.model.exec.jdbc.JDBCSession;
@@ -14,15 +13,13 @@ import org.jkiss.dbeaver.model.impl.jdbc.JDBCUtils;
 import org.jkiss.dbeaver.model.impl.jdbc.cache.JDBCObjectCache;
 import org.jkiss.dbeaver.model.runtime.DBRProgressMonitor;
 
-public class CoradbUser extends GenericSchema {
+public class CoraDbUser extends GenericSchema {
 	
 	private final String comment;
-    private List<? extends GenericView> edges;
-    private List<? extends CoraDbVertex> nodes;
     private CoraDbVertexCache coraDbVertexCache;
     private CoraDbEdgeCache coraDbEdgeCache;
 
-	public CoradbUser(CoraDbDataSource dataSource, String name, String comment) {
+	public CoraDbUser(CoraDbDataSource dataSource, String name, String comment) {
 		super(dataSource, null, name);
 		this.comment = comment;
 		coraDbVertexCache = new CoraDbVertexCache();
@@ -130,10 +127,10 @@ public class CoradbUser extends GenericSchema {
 //    }
     
     
-    public class CoraDbVertexCache extends JDBCObjectCache<CoradbUser, CoraDbVertex> {
+    public class CoraDbVertexCache extends JDBCObjectCache<CoraDbUser, CoraDbVertex> {
 
 		@Override
-		protected JDBCStatement prepareObjectsStatement(JDBCSession session, CoradbUser owner) throws SQLException {
+		protected JDBCStatement prepareObjectsStatement(JDBCSession session, CoraDbUser owner) throws SQLException {
 			final JDBCPreparedStatement dbStat;
 			StringBuilder sb = new StringBuilder("select * from db_class where class_type = 'VERTEX'");
         	sb.append(" AND owner_name = '").append(owner.getName()).append("'");
@@ -142,7 +139,7 @@ public class CoradbUser extends GenericSchema {
 		}
 
 		@Override
-		protected CoraDbVertex fetchObject(JDBCSession session, CoradbUser owner, JDBCResultSet resultSet)
+		protected CoraDbVertex fetchObject(JDBCSession session, CoraDbUser owner, JDBCResultSet resultSet)
 				throws SQLException, DBException {
                   String class_name = JDBCUtils.safeGetString(resultSet, "class_name");
                   return new CoraDbVertex(owner, class_name, "VERTEX", resultSet);
@@ -150,10 +147,10 @@ public class CoradbUser extends GenericSchema {
     	
     }
     
-    public class CoraDbEdgeCache extends JDBCObjectCache<CoradbUser, CoraDbEdge> {
+    public class CoraDbEdgeCache extends JDBCObjectCache<CoraDbUser, CoraDbEdge> {
 
 		@Override
-		protected JDBCStatement prepareObjectsStatement(JDBCSession session, CoradbUser owner) throws SQLException {
+		protected JDBCStatement prepareObjectsStatement(JDBCSession session, CoraDbUser owner) throws SQLException {
 			final JDBCPreparedStatement dbStat;
 			StringBuilder sb = new StringBuilder("select * from db_class where class_type = 'EDGE'");
         	sb.append(" AND owner_name = '").append(owner.getName()).append("'");
@@ -162,7 +159,7 @@ public class CoradbUser extends GenericSchema {
 		}
 
 		@Override
-		protected CoraDbEdge fetchObject(JDBCSession session, CoradbUser owner, JDBCResultSet resultSet)
+		protected CoraDbEdge fetchObject(JDBCSession session, CoraDbUser owner, JDBCResultSet resultSet)
 				throws SQLException, DBException {
                   String class_name = JDBCUtils.safeGetString(resultSet, "class_name");
                   return new CoraDbEdge(owner, class_name, "VERTEX", resultSet);

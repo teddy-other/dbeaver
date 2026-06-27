@@ -1,4 +1,4 @@
-﻿/*
+/*
  * DBeaver - Universal Database Manager
  * Copyright (C) 2010-2024 DBeaver Corp and others
  *
@@ -20,35 +20,31 @@ import org.eclipse.jface.action.IContributionManager;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbenchPart;
-import org.jkiss.dbeaver.ext.coradb.model.plan.CoraDbExecutionPlan;
+import org.jkiss.dbeaver.ext.cubrid.model.plan.CubridPlanAnalyser;
 import org.jkiss.dbeaver.model.exec.plan.DBCPlan;
 import org.jkiss.dbeaver.model.sql.SQLQuery;
 import org.jkiss.dbeaver.ui.editors.sql.plan.simple.SQLPlanViewProviderSimple;
 
 public class CoraDbPlanViewProvider extends SQLPlanViewProviderSimple {
 
-    
     @Override
     public Viewer createPlanViewer(IWorkbenchPart workbenchPart, Composite parent) {
-        CoraDbPlanText treeViewer = new CoraDbPlanText(workbenchPart, parent);
-        return treeViewer;
+        return new CoraDbPlanText(workbenchPart, parent);
     }
 
     @Override
-    public void visualizeQueryPlan(Viewer viewer, SQLQuery query, DBCPlan plan) {        
-        query.setText(((CoraDbExecutionPlan) plan).getPlanQueryString());
-        fillPlan(query, plan);
-        showPlan(viewer, query, plan);
+    public void visualizeQueryPlan(Viewer viewer, SQLQuery query, DBCPlan plan) {
+        SQLQuery fullText = new SQLQuery(query.getDataSource(), ((CubridPlanAnalyser) plan).getPlanQueryString());
+        fillPlan(fullText, plan);
+        showPlan(viewer, fullText, plan);
     }
 
     @Override
     public void contributeActions(Viewer viewer, IContributionManager contributionManager, SQLQuery lastQuery, DBCPlan lastPlan) {
-     
     }
 
     @Override
     protected void showPlan(Viewer viewer, SQLQuery query, DBCPlan plan) {
-        CoraDbPlanText treeViewer = (CoraDbPlanText) viewer;
-        treeViewer.showPlan(query, plan);
+        ((CoraDbPlanText) viewer).showPlan(query, plan);
     }
 }

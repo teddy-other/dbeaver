@@ -74,7 +74,7 @@ import org.jkiss.dbeaver.ext.coradb.model.CoraDbDataSource;
 import org.jkiss.dbeaver.ext.coradb.model.CoraDbEdge;
 import org.jkiss.dbeaver.ext.coradb.model.CoraDbVertex;
 import org.jkiss.dbeaver.ext.coradb.model.CoraDbVertexColumn;
-import org.jkiss.dbeaver.ext.coradb.model.CoradbUser;
+import org.jkiss.dbeaver.ext.coradb.model.CoraDbUser;
 import org.jkiss.dbeaver.model.DBPDataSource;
 import org.jkiss.dbeaver.model.DBUtils;
 import org.jkiss.dbeaver.model.exec.DBCException;
@@ -527,10 +527,10 @@ public class GraphChart extends MoveBox {
             @Override
             protected IStatus run(DBRProgressMonitor monitor) {
                 try {
-                    List<? extends CoradbUser> userList = dataSource.getCoradbUsers(monitor);
+                    List<? extends CoraDbUser> userList = dataSource.getCoradbUsers(monitor);
                     List<String> labelList = new ArrayList<>();
 
-                    for (CoradbUser user : userList) {
+                    for (CoraDbUser user : userList) {
                         List<? extends Object> objList = user.getVertexs(monitor);
 
                         for(Object o: objList) {
@@ -634,9 +634,9 @@ public class GraphChart extends MoveBox {
             @Override
             protected IStatus run(DBRProgressMonitor monitor) {
                 try {
-                    List<? extends CoradbUser> userList = dataSource.getCoradbUsers(monitor);
+                    List<? extends CoraDbUser> userList = dataSource.getCoradbUsers(monitor);
                     List<? extends GenericTableColumn> columnList = null;
-                    for (CoradbUser user : userList) {
+                    for (CoraDbUser user : userList) {
                         List<? extends Object> objList = user.getVertexs(monitor);
 
                         for(Object o: objList) {

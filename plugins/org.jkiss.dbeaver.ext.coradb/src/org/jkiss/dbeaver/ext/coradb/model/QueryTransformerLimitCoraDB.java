@@ -20,6 +20,7 @@ public class QueryTransformerLimitCoraDB extends QueryTransformerLimit
         return statement != null && isLimitApplicable(statement);
     }
 
+    @SuppressWarnings("deprecation")
     public boolean isLimitApplicable(Statement statement) {
         if (statement instanceof Select select
                 && select.getSelectBody() instanceof PlainSelect selectBody) {
