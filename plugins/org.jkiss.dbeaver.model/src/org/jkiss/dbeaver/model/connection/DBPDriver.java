@@ -40,6 +40,13 @@ import java.util.Set;
 public interface DBPDriver extends DBPNamedObject, DBPDriverLibraryProvider {
 
     /**
+     * Connection configuration property (see {@link DBPConnectionConfiguration#getProperty(String)}).
+     * When set on a particular connection, only the driver library with this id is used to load
+     * the driver classes for that connection, instead of all libraries attached to the driver.
+     */
+    String PROP_ACTIVE_DRIVER_LIBRARY_ID = "@dbeaver-driver-active-library-id";
+
+    /**
      * Driver contributor
      */
     @NotNull

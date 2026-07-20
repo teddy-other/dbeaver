@@ -62,6 +62,7 @@ public class DriverLoaderDescriptor implements DBPDriverLoader {
     private final DriverDescriptor driver;
     private final List<DBPDriverLibraryProvider> libraryProviders = new ArrayList<>();
     private final Map<DBPDriverLibrary, List<DriverFileInfo>> resolvedFiles = new HashMap<>();
+    private DBPDriverLibrary restrictedLibrary;
 
     /**
      * Parent classloader of every driver classloader that loads global libraries.
@@ -131,6 +132,14 @@ public class DriverLoaderDescriptor implements DBPDriverLoader {
 
     public void addLibraryProvider(DBPDriverLibraryProvider libraryProvider) {
         libraryProviders.add(libraryProvider);
+    }
+
+    /**
+     * Restricts this loader to a single driver library instead of all libraries attached to the driver.
+     * Used to build a per-connection classloader that only sees one specific library.
+     */
+    public void setRestrictedLibrary(@NotNull DBPDriverLibrary library) {
+        this.restrictedLibrary = library;
     }
 
     private Object createDriverInstance() throws DBException {
@@ -382,7 +391,9 @@ public class DriverLoaderDescriptor implements DBPDriverLoader {
 
     @NotNull
     private List<DBPDriverLibrary> getAllLibraries() {
-        List<DBPDriverLibrary> libraries = new ArrayList<>(driver.getDriverLibraries());
+        List<DBPDriverLibrary> libraries = restrictedLibrary != null
+            ? new ArrayList<>(List.of(restrictedLibrary))
+            : new ArrayList<>(driver.getDriverLibraries());
         if (!libraryProviders.isEmpty()) {
             for (DBPDriverLibraryProvider dlp : libraryProviders) {
                 libraries.addAll(dlp.getDriverLibraries());
