@@ -260,6 +260,11 @@ public abstract class ConnectionPageAbstract extends DialogPage implements IData
                 licenseButton.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
             }
         }
+
+        createDriverLibrarySelector(panel);
+    }
+
+    protected void createDriverLibrarySelector(Composite parent) {
     }
 
     private void formDatabaseDocumentationInfoLabel(Composite panel) {

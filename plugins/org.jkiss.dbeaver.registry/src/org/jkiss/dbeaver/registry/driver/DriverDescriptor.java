@@ -1086,12 +1086,36 @@ public class DriverDescriptor extends AbstractDescriptor implements DBPDriver {
     public DBPDriverLoader getDriverLoader(@NotNull DBPDataSourceContainer dataSourceContainer) {
         getAllDriverLoaders();
 
+        String activeLibraryId = dataSourceContainer.getConnectionConfiguration().getProperty(DBPDriver.PROP_ACTIVE_DRIVER_LIBRARY_ID);
+        if (!CommonUtils.isEmpty(activeLibraryId)) {
+            for (DBPDriverLibrary library : libraries) {
+                if (activeLibraryId.equals(library.getId())) {
+                    return getOrCreateLibraryLoader(library);
+                }
+            }
+        }
+
         DBPAuthModelDescriptor authModel = dataSourceContainer.getConnectionConfiguration().getAuthModelDescriptor();
         DriverLoaderDescriptor loader = driverLoaders.get(authModel.getId());
         if (loader != null) {
             return loader;
         }
         return getDefaultDriverLoader();
+    }
+
+    @NotNull
+    public synchronized DriverLoaderDescriptor getOrCreateLibraryLoader(@NotNull DBPDriverLibrary library) {
+        String loaderId = "lib:" + library.getId();
+        if (driverLoaders == null) {
+            driverLoaders = new LinkedHashMap<>();
+        }
+        DriverLoaderDescriptor loader = driverLoaders.get(loaderId);
+        if (loader == null) {
+            loader = new DriverLoaderDescriptor(loaderId, this);
+            loader.setRestrictedLibrary(library);
+            driverLoaders.put(loaderId, loader);
+        }
+        return loader;
     }
 
     /**

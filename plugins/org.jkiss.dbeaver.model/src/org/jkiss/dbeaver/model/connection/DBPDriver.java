@@ -39,6 +39,8 @@ import java.util.Set;
  */
 public interface DBPDriver extends DBPNamedObject, DBPDriverLibraryProvider {
 
+    String PROP_ACTIVE_DRIVER_LIBRARY_ID = "@dbeaver-driver-active-library-id";
+
     /**
      * Driver contributor
      */
