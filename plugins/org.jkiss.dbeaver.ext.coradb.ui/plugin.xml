@@ -26,12 +26,12 @@
 			id="visualview"
 			label="%presentation.visual.label"
 			description="%presentation.visual.description"
-			icon="icons/picture.svg"
+			icon="platform:/plugin/org.jkiss.dbeaver.ui/icons/picture.svg"
 			class="org.jkiss.dbeaver.ext.coradb.ui.views.VisualizationPresentation"
 			type="columns"
 			supportsRecordMode="false"
 			order="50">
-			<objectType name="org.jkiss.dbeaver.model.exec.DBCResultSet" if="object.session.dataSource.container.driver.id == 'vit_neo4j_jdbc' || object.session.dataSource.container.driver.id == 'vit_turbograph_jdbc' || object.session.dataSource.container.driver.id == 'coradb_jdbc'"/>
+            <objectType name="org.jkiss.dbeaver.model.exec.DBCResultSet" if="object.session.dataSource.container.driver.id == 'vit_neo4j_jdbc' || object.session.dataSource.container.driver.id == 'coradb_jdbc'"/>
         </presentation>
 	</extension>
    

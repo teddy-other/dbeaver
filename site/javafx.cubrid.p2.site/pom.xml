@@ -68,6 +68,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
+                                <Eclipse-PlatformFilter>(osgi.os=win32)</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -80,6 +81,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=linux) (osgi.arch=x86_64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -92,6 +94,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=macosx) (osgi.arch=x86_64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -104,6 +107,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=macosx) (osgi.arch=aarch64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -116,6 +120,7 @@
                                 <_noee>true</_noee>
                                 <Require-Capability>osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=17))"</Require-Capability>
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=linux) (osgi.arch=aarch64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
 
@@ -132,6 +137,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.win;bundle-version="[${javafx.version},24)",openjfx.graphics.win;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(osgi.os=win32)</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -146,6 +152,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.linux;bundle-version="[${javafx.version},24)",openjfx.graphics.linux;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=linux) (osgi.arch=x86_64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -160,6 +167,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.mac;bundle-version="[${javafx.version},24)",openjfx.graphics.mac;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=macosx) (osgi.arch=x86_64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -174,6 +182,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.mac-aarch64;bundle-version="[${javafx.version},24)",openjfx.graphics.mac-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=macosx) (osgi.arch=aarch64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -188,6 +197,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Export-Package>javafx.*;version="${javafx.version}",com.sun.javafx.*;version="${javafx.version}"</Export-Package>
                                 <Require-Bundle>openjfx.base.linux-aarch64;bundle-version="[${javafx.version},24)",openjfx.graphics.linux-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=linux) (osgi.arch=aarch64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
 
@@ -208,6 +218,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
                                 <Require-Bundle>openjfx.base.win;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(osgi.os=win32)</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -222,6 +233,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
                                 <Require-Bundle>openjfx.base.linux;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=linux) (osgi.arch=x86_64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -236,6 +248,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
                                 <Require-Bundle>openjfx.base.mac;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=macosx) (osgi.arch=x86_64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -250,6 +263,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
                                 <Require-Bundle>openjfx.base.mac-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=macosx) (osgi.arch=aarch64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
                         <artifact>
@@ -264,6 +278,7 @@
                                 <Bundle-RequiredExecutionEnvironment>JavaSE-17</Bundle-RequiredExecutionEnvironment>
                                 <Eclipse-BuddyPolicy>dependent</Eclipse-BuddyPolicy>
                                 <Require-Bundle>openjfx.base.linux-aarch64;bundle-version="[${javafx.version},24)"</Require-Bundle>
+                                <Eclipse-PlatformFilter>(&amp; (osgi.os=linux) (osgi.arch=aarch64))</Eclipse-PlatformFilter>
                             </instructions>
                         </artifact>
 

@@ -62,6 +62,7 @@
                         description="CORADB JDBC driver"
                         supportedConfigurationTypes="MANUAL,URL"
                         webURL="https://www.coradb.ai/"
+                        promoted="1"
                         categories="sql">
                         <file type="jar" path="https://ftp.cubrid.org/iitp/coradb/jdbc/JDBC-1.0.0.1581-coradb.jar"/>
                         <parameter name="stored-unquoted-case" value="UPPER"/>

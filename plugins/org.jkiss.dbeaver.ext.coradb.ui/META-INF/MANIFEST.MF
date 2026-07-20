@@ -17,7 +17,7 @@ Require-Bundle: org.jkiss.dbeaver.ext.generic,
  org.jkiss.dbeaver.ext.generic,
  org.jkiss.dbeaver.ext.generic.ui,
  org.jkiss.dbeaver.ext.cubrid,
- org.jkiss.dbeaver.ext.coradb.graph,
+ org.jkiss.dbeaver.ext.coradb.graph;resolution:=optional,
  com.google.gson
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-21
@@ -26,4 +26,4 @@ Bundle-ClassPath: .
 Automatic-Module-Name: org.jkiss.dbeaver.ext.coradb.ui
 Import-Package: org.jkiss.dbeaver.ext.coradb.model,
  org.jkiss.dbeaver.ext.coradb.model.plan,
- org.jkiss.dbeaver.ext.coradb.graph
+ org.jkiss.dbeaver.ext.coradb.graph;resolution:=optional
