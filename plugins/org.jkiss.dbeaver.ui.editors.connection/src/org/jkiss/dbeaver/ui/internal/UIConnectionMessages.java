@@ -97,6 +97,7 @@ public class UIConnectionMessages extends NLS {
     public static String dialog_edit_driver_button_bind_class;
     public static String dialog_edit_driver_button_classpath;
     public static String dialog_edit_driver_button_update_version;
+    public static String dialog_edit_driver_button_save_default_library;
     public static String dialog_edit_driver_button_details;
     public static String dialog_edit_driver_button_delete;
     public static String dialog_edit_driver_button_down;
@@ -116,6 +117,7 @@ public class UIConnectionMessages extends NLS {
     public static String dialog_edit_driver_label_default_port;
     public static String dialog_edit_driver_label_default_database;
     public static String dialog_edit_driver_label_default_user;
+    public static String dialog_edit_driver_label_default_library;
     public static String dialog_edit_driver_label_id;
     public static String dialog_edit_driver_label_id_tip;
     public static String dialog_edit_driver_label_provider_id;

@@ -90,6 +90,9 @@ public class DriverEditDialog extends BaseDialog {
     private Button detailsButton;
     private Combo classListCombo;
     private Button findClassButton;
+    private Combo defaultLibCombo;
+    private Button saveDefaultButton;
+    private DBPDriverLibrary defaultLibrary;
     private Text driverNameText;
     private Text driverDescText;
     private Text driverClassText;
@@ -430,7 +433,10 @@ public class DriverEditDialog extends BaseDialog {
     }
 
     private void createLibrariesTab(CTabFolder group) {
-        libraries.addAll(driver.getEnabledDriverLibraries());
+        // Show the full list of libraries (including disabled ones), so that entries
+        // don't disappear from the table after downloading/updating driver files.
+        libraries.addAll(driver.getDriverLibraries());
+        defaultLibrary = detectDefaultLibrary();
 
         GridData gd;
         Composite libsGroup = new Composite(group, SWT.NONE);
@@ -544,6 +550,25 @@ public class DriverEditDialog extends BaseDialog {
                 }
             });
             findClassButton.setEnabled(!isReadOnly);
+
+            // Default driver library selector.
+            // The selected library is the one used to load the driver; all other libraries are disabled.
+            // This choice is stored in the driver configuration, so it applies to all connections.
+            Composite defaultLibGroup = new Composite(libsListGroup, SWT.TOP);
+            defaultLibGroup.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+            GridLayout defaultLibLayout = new GridLayout(3, false);
+            defaultLibLayout.marginHeight = 0;
+            defaultLibLayout.marginWidth = 0;
+            defaultLibGroup.setLayout(defaultLibLayout);
+
+            UIUtils.createControlLabel(defaultLibGroup, UIConnectionMessages.dialog_edit_driver_label_default_library);
+            defaultLibCombo = new Combo(defaultLibGroup, SWT.DROP_DOWN | SWT.READ_ONLY);
+            defaultLibCombo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+            defaultLibCombo.setEnabled(!isReadOnly);
+            saveDefaultButton = new Button(defaultLibGroup, SWT.PUSH);
+            saveDefaultButton.setText(UIConnectionMessages.dialog_edit_driver_button_save_default_library);
+            saveDefaultButton.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> saveDefaultLibrary()));
+            saveDefaultButton.setEnabled(!isReadOnly);
         }
 
         Composite libsControlGroup = new Composite(libsGroup, SWT.TOP);
@@ -606,6 +631,8 @@ public class DriverEditDialog extends BaseDialog {
                 SelectionListener.widgetSelectedAdapter(e -> {
                     driver.setDriverLibraries(libraries);
                     driver.getDefaultDriverLoader().updateFiles(true);
+                    // setDriverLibraries() re-enabled all libraries; keep the default selection consistent
+                    applyDefaultLibrarySelection();
                     changeLibContent();
                 }
             ));
@@ -869,6 +896,86 @@ public class DriverEditDialog extends BaseDialog {
         }
         detailsButton.setEnabled(hasFiles);
         classListCombo.setEnabled(hasFiles);
+        refreshDefaultLibCombo();
+    }
+
+    /**
+     * Detects the library that is currently used as the default one.
+     * If exactly one library is enabled while others are disabled, that library is the default.
+     * Otherwise there is no explicit default (all libraries are used).
+     */
+    @Nullable
+    private DBPDriverLibrary detectDefaultLibrary() {
+        DBPDriverLibrary enabled = null;
+        boolean hasDisabled = false;
+        for (DBPDriverLibrary lib : libraries) {
+            if (lib.isDisabled()) {
+                hasDisabled = true;
+            } else if (enabled == null) {
+                enabled = lib;
+            } else {
+                // More than one enabled library - no single default
+                return null;
+            }
+        }
+        return hasDisabled ? enabled : null;
+    }
+
+    private void refreshDefaultLibCombo() {
+        if (defaultLibCombo == null || defaultLibCombo.isDisposed()) {
+            return;
+        }
+        defaultLibCombo.removeAll();
+        for (DBPDriverLibrary lib : libraries) {
+            String name = lib.getDisplayName();
+            if (lib.getPreferredVersion() != null) {
+                name += " [" + lib.getPreferredVersion() + "]";
+            }
+            defaultLibCombo.add(name);
+        }
+        if (defaultLibrary != null) {
+            int index = libraries.indexOf(defaultLibrary);
+            if (index >= 0) {
+                defaultLibCombo.select(index);
+            }
+        }
+    }
+
+    /**
+     * Applies the current default library selection: the default library stays enabled,
+     * all other libraries are disabled. Does nothing when no explicit default is set.
+     */
+    private void applyDefaultLibrarySelection() {
+        if (defaultLibrary == null || !libraries.contains(defaultLibrary)) {
+            return;
+        }
+        for (DBPDriverLibrary lib : libraries) {
+            lib.setDisabled(lib != defaultLibrary);
+        }
+    }
+
+    private void saveDefaultLibrary() {
+        int index = defaultLibCombo.getSelectionIndex();
+        if (index < 0 || index >= libraries.size()) {
+            return;
+        }
+        defaultLibrary = libraries.get(index);
+
+        // Commit the current library list to the driver, then apply the default selection
+        driver.setDriverLibraries(libraries);
+        applyDefaultLibrarySelection();
+        driver.resetDriverInstance();
+
+        try {
+            provider.getRegistry().saveDrivers();
+        } catch (DBException e) {
+            DBWorkbench.getPlatformUI().showError("Drivers save error", "Error saving default driver library", e);
+            return;
+        }
+
+        changeLibContent();
+        changeLibSelection();
+        libTable.refresh();
     }
 
     private void changeLibSelection() {
@@ -939,11 +1046,15 @@ public class DriverEditDialog extends BaseDialog {
     private void resetLibraries() {
         libraries.clear();
         libraries.addAll(driver.getOrigLibraries());
+        defaultLibrary = detectDefaultLibrary();
     }
 
     @Override
     protected void okPressed() {
         saveDriverSettings(this.driver);
+        // setDriverLibraries() re-enables every library, so re-apply the default selection
+        // (only the default library stays enabled) after the settings are stored.
+        applyDefaultLibrarySelection();
 
         DBPDriver oldDriver = provider.getDriverByName(driver.getCategory(), driver.getName());
         if (oldDriver != null && oldDriver != driver && !oldDriver.isDisabled() && oldDriver.getReplacedBy() == null) {
